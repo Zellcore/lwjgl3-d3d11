@@ -20,7 +20,7 @@ public class D3D11DeviceImpl implements ID3D11Device {
 
     public long CreateBuffer(D3D11BufferDesc desc, Object NULL,
             ID3D11Buffer buffer) {
-        ByteBuffer bufferDesc = Memory.buffer(D3D11BufferDesc.SIZEOF);
+        ByteBuffer bufferDesc = Memory.acquire(D3D11BufferDesc.SIZEOF);
         desc.write(bufferDesc);
         bufferDesc.flip();
         D3D11BufferImpl bufferImpl = (D3D11BufferImpl) buffer;

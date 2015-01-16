@@ -123,7 +123,8 @@ public enum DXGIFormat {
     private final int value;
 
     private DXGIFormat() {
-        value = ordinal();
+        int ord = ordinal();
+        value = ord;
     }
 
     private DXGIFormat(int value) {

@@ -3,6 +3,7 @@ package org.lwjgl.d3d11;
 import static org.lwjgl.system.windows.WinUser.*;
 import static org.lwjgl.system.windows.WindowsDisplay.*;
 import static org.lwjgl.system.windows.WindowsLibrary.*;
+import static org.lwjgl.d3d11.DXGISwapChainFlag.*;
 
 import static org.lwjgl.d3d11.impl.D3D11.*;
 import org.lwjgl.system.windows.WNDCLASSEX;
@@ -63,7 +64,7 @@ public class SimpleTest {
         swapChainDesc.Windowed = true;
         swapChainDesc.SampleDesc.Count = 1;
         swapChainDesc.SampleDesc.Quality = 0;
-        swapChainDesc.Flags = DXGISwapChainFlag.DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+        swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
         Out<IDXGISwapChain> swapChainOut = new Out<>();
         Out<ID3D11Device> deviceOut = new Out<>();

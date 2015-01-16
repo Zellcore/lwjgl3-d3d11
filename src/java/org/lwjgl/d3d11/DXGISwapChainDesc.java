@@ -14,7 +14,7 @@ public class DXGISwapChainDesc {
     long OutputWindow;
     boolean Windowed;
     DXGISwapEffect SwapEffect = null;
-    DXGISwapChainFlag Flags = null;
+    int Flags = 0;
 
     public void writeInto(ByteBuffer swapChainDescBuffer) {
 

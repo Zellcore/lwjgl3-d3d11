@@ -31,7 +31,7 @@ public class D3D11 {
             DXGISwapChainDesc swapChainDesc, Out<IDXGISwapChain> swapChainOut,
             Out<ID3D11Device> deviceOut, Out<D3DFeatureLevel> featureLevelOut,
             Out<ID3D11DeviceContext> immediateContextOut) {
-        IntBuffer featureLevelsBuffer = Memory.buffer(4 * featureLevels.length)
+        IntBuffer featureLevelsBuffer = Memory.acquire(4 * featureLevels.length)
                 .asIntBuffer();
         for (int i = 0; i < featureLevels.length; i++) {
             featureLevelsBuffer.put(featureLevels[i].ordinal());
