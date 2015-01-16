@@ -1,0 +1,23 @@
+package org.lwjgl.d3d11;
+
+public enum D3DFeatureLevel {
+
+    D3D_FEATURE_LEVEL_9_1(0x9100),
+    D3D_FEATURE_LEVEL_9_2(0x9200),
+    D3D_FEATURE_LEVEL_9_3(0x9300),
+    D3D_FEATURE_LEVEL_10_0(0xa000),
+    D3D_FEATURE_LEVEL_10_1(0xa100),
+    D3D_FEATURE_LEVEL_11_0(0xb000),
+    D3D_FEATURE_LEVEL_11_1(0xb100);
+
+    private final int value;
+
+    D3DFeatureLevel(int value) {
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+}
