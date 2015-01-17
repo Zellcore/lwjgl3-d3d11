@@ -21,6 +21,10 @@ public class COM {
 
     public static final native void n__uuidof_ID3D11DeviceContext1(long uuidOutPtr);
 
+    public static final native void n__uuidof_IDXGISwapChain(long uuidOutPtr);
+
+    public static final native void n__uuidof_ID3D11Texture2D(long uuidOutPtr);
+
     public static GUID __uuidof_IDXGIDevice() {
         ByteBuffer bb = GUID.malloc();
         n__uuidof_IDXGIDevice(MemoryUtil.memAddressSafe(bb));
@@ -48,6 +52,18 @@ public class COM {
     public static GUID __uuidof_ID3D11DeviceContext1() {
         ByteBuffer bb = GUID.malloc();
         n__uuidof_ID3D11DeviceContext1(MemoryUtil.memAddressSafe(bb));
+        return new GUID(bb);
+    }
+
+    public static GUID __uuidof_IDXGISwapChain() {
+        ByteBuffer bb = GUID.malloc();
+        n__uuidof_IDXGISwapChain(MemoryUtil.memAddressSafe(bb));
+        return new GUID(bb);
+    }
+
+    public static GUID __uuidof_ID3D11Texture2D() {
+        ByteBuffer bb = GUID.malloc();
+        n__uuidof_ID3D11Texture2D(MemoryUtil.memAddressSafe(bb));
         return new GUID(bb);
     }
 

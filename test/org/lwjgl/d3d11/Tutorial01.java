@@ -15,9 +15,11 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.d3d11.impl.D3D11Device1Impl;
 import org.lwjgl.d3d11.impl.D3D11DeviceContext1Impl;
+import org.lwjgl.d3d11.impl.D3D11Texture2DImpl;
 import org.lwjgl.d3d11.impl.DXGIDeviceImpl;
 import org.lwjgl.d3d11.impl.DXGIFactory1Impl;
 import org.lwjgl.d3d11.impl.DXGIFactory2Impl;
+import org.lwjgl.d3d11.impl.DXGISwapChainImpl;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
 
@@ -63,6 +65,7 @@ public class Tutorial01 {
                 DispatchMessage(msgBuf);
             }
             Thread.yield();
+            Render();
         }
         window.destroy();
     }
@@ -83,8 +86,8 @@ public class Tutorial01 {
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = new DXGI_SWAP_CHAIN_DESC();
         swapChainDesc.BufferCount = 1;
-        swapChainDesc.BufferDesc.Width = 800;
-        swapChainDesc.BufferDesc.Height = 600;
+        swapChainDesc.BufferDesc.Width = window.getClientWidth();
+        swapChainDesc.BufferDesc.Height = window.getClientHeight();
         swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
         swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -163,20 +166,58 @@ public class Tutorial01 {
             sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
             sd.BufferCount = 1;
 
-            Out<IDXGISwapChain1> swapChainOut = new Out<IDXGISwapChain1>();
-            hr = dxgiFactory2.CreateSwapChainForHwnd(g_pd3dDevice, window.getHwnd(), sd, null, null, swapChainOut);
-            if (SUCCEEDED(hr))
-            {
-                //hr = g_pSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain) );
+            Out<IDXGISwapChain1> swapChain1Out = new Out<IDXGISwapChain1>();
+            hr = dxgiFactory2.CreateSwapChainForHwnd(g_pd3dDevice, window.getHwnd(), sd, null, null, swapChain1Out);
+            g_pSwapChain1 = swapChain1Out.value;
+            if (SUCCEEDED(hr)) {
+                Out<IDXGISwapChain> swapChainOut = new Out<IDXGISwapChain>();
+                hr = g_pSwapChain1.QueryInterface(IDXGISwapChain.__uuid, DXGISwapChainImpl.class, swapChainOut);
+                g_pSwapChain = swapChainOut.value;
             }
             dxgiFactory2.Release();
+        } else {
+            throw new UnsupportedOperationException("NYI");
         }
+
+        // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
+        hr = dxgiFactory.MakeWindowAssociation(window.getHwnd(), DXGI_MWA_NO_ALT_ENTER);
+        dxgiFactory.Release();
+
+        if (FAILED(hr))
+            return hr;
+
+        // Create a render target view
+        ID3D11Texture2D pBackBuffer = null;
+        Out<ID3D11Texture2D> pBackBufferOut = new Out<ID3D11Texture2D>();
+        hr = g_pSwapChain.GetBuffer(0, ID3D11Texture2D.__uuid, D3D11Texture2DImpl.class, pBackBufferOut);
+        pBackBuffer = pBackBufferOut.value;
+        if (FAILED(hr))
+            return hr;
+
+        Out<ID3D11RenderTargetView> renderTargetViewOut = new Out<ID3D11RenderTargetView>();
+        hr = g_pd3dDevice.CreateRenderTargetView(pBackBuffer, null, renderTargetViewOut);
+        g_pRenderTargetView = renderTargetViewOut.value;
+        pBackBuffer.Release();
+        if (FAILED(hr))
+            return hr;
+
+        g_pImmediateContext.OMSetRenderTargets(new ID3D11RenderTargetView[] { g_pRenderTargetView }, null);
+
+        // Setup the viewport
+        D3D11_VIEWPORT vp = new D3D11_VIEWPORT();
+        vp.Width = window.getClientWidth();
+        vp.Height = window.getClientHeight();
+        vp.MinDepth = 0.0f;
+        vp.MaxDepth = 1.0f;
+        vp.TopLeftX = 0;
+        vp.TopLeftY = 0;
+        g_pImmediateContext.RSSetViewports(new D3D11_VIEWPORT[] { vp });
 
         return 0;
     }
 
     private void CleanupDevice() {
-
+        
     }
 
     private void Render() {

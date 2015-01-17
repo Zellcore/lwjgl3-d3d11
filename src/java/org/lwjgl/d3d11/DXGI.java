@@ -10,4 +10,9 @@ public interface DXGI {
     int DXGI_USAGE_DISCARD_ON_PRESENT = (1 << (5 + 4));
     int DXGI_USAGE_UNORDERED_ACCESS = (1 << (6 + 4));
 
+    int DXGI_MWA_NO_WINDOW_CHANGES = (1 << 0);
+    int DXGI_MWA_NO_ALT_ENTER = (1 << 1);
+    int DXGI_MWA_NO_PRINT_SCREEN = (1 << 2);
+    int DXGI_MWA_VALID = (0x7);
+
 }

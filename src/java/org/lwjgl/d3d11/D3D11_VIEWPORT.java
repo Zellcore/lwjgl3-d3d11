@@ -1,10 +1,14 @@
 package org.lwjgl.d3d11;
 
-public class D3D11_VIEWPORT {
+public class D3D11_VIEWPORT implements Struct {
 
-    public int TopLeftX;
-    public int TopLeftY;
-    public int Width;
-    public int Height;
+    public static final int SIZEOF = 24;
+
+    public float TopLeftX;
+    public float TopLeftY;
+    public float Width;
+    public float Height;
+    public float MinDepth;
+    public float MaxDepth;
 
 }

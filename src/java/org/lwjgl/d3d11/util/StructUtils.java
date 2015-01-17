@@ -16,31 +16,28 @@ public class StructUtils {
         if (type == int.class) {
             int val = field.getInt(struct);
             bb.putInt(val);
-            System.err.println("PUT INT " + field);
+        } else if (type == float.class) {
+            float val = field.getFloat(struct);
+            bb.putFloat(val);
         } else if (type == long.class) {
             long val = field.getLong(struct);
             if (org.lwjgl.Pointer.POINTER_SIZE == 8) {
                 bb.putLong(val);
-                System.err.println("PUT LONG" + field);
             } else {
                 bb.putInt((int) val);
-                System.err.println("PUT INT" + field);
             }
         } else if (type == boolean.class) {
             byte val = field.getBoolean(struct) ? (byte) 1 : 0;
             bb.putInt(val);
-            System.err.println("PUT INT" + field);
         } else if (type instanceof Class) {
             Class<?> clazz = (Class<?>) type;
             if (clazz.isEnum()) {
                 Enum<?> e = (Enum<?>) field.get(struct);
                 if (e == null) {
                     bb.putInt(0);
-                    System.err.println("PUT INT" + field);
                 } else {
                     int ordinal = e.ordinal();
                     bb.putInt(ordinal);
-                    System.err.println("PUT INT" + field);
                 }
             } else if (Struct.class.isAssignableFrom(clazz)) {
                 Struct str = (Struct) field.get(struct);
@@ -57,7 +54,6 @@ public class StructUtils {
                     // }
                 } else {
                     /* Delegate to that struct */
-                    System.err.println("WRITE: " + str);
                     write(str, bb);
                 }
             } else {
