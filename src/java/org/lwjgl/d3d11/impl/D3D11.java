@@ -23,7 +23,7 @@ public class D3D11 {
 
     public static final int D3D11_SDK_VERSION = 7;
 
-    private static final native long D3D11CreateDevice0(long adapterPtr, int driverType, long hmodule_Software,
+    private static final native long nD3D11CreateDevice(long adapterPtr, int driverType, long hmodule_Software,
             int flags, int numFeatureLevels, long featureLevelsPtr, int sdkVersion, long ppDevicePtr,
             long pFeatureLevel, long ppImmediateContextPtr);
 
@@ -40,7 +40,7 @@ public class D3D11 {
         PointerBuffer ppDeviceBuffer = BufferUtils.createPointerBuffer(1);
         IntBuffer selectedFeatureLevelBuffer = BufferUtils.createIntBuffer(1);
         PointerBuffer ppImmediateContextBuffer = BufferUtils.createPointerBuffer(1);
-        long res = D3D11CreateDevice0(adapterPtr, DriverType.ordinal(), hmodule_Software, Flags,
+        long res = nD3D11CreateDevice(adapterPtr, DriverType.ordinal(), hmodule_Software, Flags,
                 featureLevelsBuffer.remaining() / 4, MemoryUtil.memAddressSafe(featureLevelsBuffer), SDKVersion,
                 MemoryUtil.memAddressSafe(ppDeviceBuffer), MemoryUtil.memAddressSafe(selectedFeatureLevelBuffer),
                 MemoryUtil.memAddressSafe(ppImmediateContextBuffer));

@@ -2,7 +2,7 @@ package org.lwjgl.d3d11;
 
 import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
 import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
-import static org.lwjgl.d3d11.DXGI_SWAP_CHAIN_FLAG.DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+import static org.lwjgl.d3d11.DXGI_SWAP_CHAIN_FLAG.*;
 import static org.lwjgl.d3d11.impl.D3D11.*;
 import static org.lwjgl.d3d11.DXGI_FORMAT.*;
 import static org.lwjgl.d3d11.DXGI_SWAP_EFFECT.*;
@@ -13,8 +13,11 @@ import static org.lwjgl.d3d11.winerror.*;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.d3d11.impl.D3D11Device1Impl;
+import org.lwjgl.d3d11.impl.D3D11DeviceContext1Impl;
 import org.lwjgl.d3d11.impl.DXGIDeviceImpl;
 import org.lwjgl.d3d11.impl.DXGIFactory1Impl;
+import org.lwjgl.d3d11.impl.DXGIFactory2Impl;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
 
@@ -94,19 +97,21 @@ public class Tutorial01 {
         swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
         long hr = 0;
-        Out<ID3D11Device> device = new Out<ID3D11Device>();
-        Out<D3D_FEATURE_LEVEL> featureLevel = new Out<D3D_FEATURE_LEVEL>();
-        Out<ID3D11DeviceContext> immediateContext = new Out<ID3D11DeviceContext>();
+        Out<ID3D11Device> deviceOut = new Out<ID3D11Device>();
+        Out<D3D_FEATURE_LEVEL> featureLevelOut = new Out<D3D_FEATURE_LEVEL>();
+        Out<ID3D11DeviceContext> immediateContextOut = new Out<ID3D11DeviceContext>();
         for (int driverTypeIndex = 0; driverTypeIndex < driverTypes.length; driverTypeIndex++) {
             g_driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDevice(null, g_driverType, 0L, createDeviceFlags, featureLevels, D3D11_SDK_VERSION, device,
-                    featureLevel, immediateContext);
+            hr = D3D11CreateDevice(null, g_driverType, 0L, createDeviceFlags, featureLevels, D3D11_SDK_VERSION,
+                    deviceOut, featureLevelOut, immediateContextOut);
+            g_pd3dDevice = deviceOut.value;
+            g_featureLevel = featureLevelOut.value;
+            g_pImmediateContext = immediateContextOut.value;
             if (SUCCEEDED(hr))
                 break;
         }
         if (FAILED(hr))
             return hr;
-        g_pd3dDevice = device.value;
 
         // Obtain DXGI factory from device (since we used nullptr for pAdapter above)
         IDXGIFactory1 dxgiFactory = null;
@@ -131,6 +136,41 @@ public class Tutorial01 {
         }
         if (FAILED(hr))
             return hr;
+
+        // Create swap chain
+        IDXGIFactory2 dxgiFactory2 = null;
+        Out<IDXGIFactory2> dxgiFactory2Out = new Out<IDXGIFactory2>();
+        hr = dxgiFactory.QueryInterface(IDXGIFactory2.__uuid, DXGIFactory2Impl.class, dxgiFactory2Out);
+        dxgiFactory2 = dxgiFactory2Out.value;
+        if (dxgiFactory2 != null) {
+            // DirectX 11.1 or later
+            Out<ID3D11Device1> pd3dDevice1Out = new Out<ID3D11Device1>();
+            hr = g_pd3dDevice.QueryInterface(ID3D11Device1.__uuid, D3D11Device1Impl.class, pd3dDevice1Out);
+            g_pd3dDevice1 = pd3dDevice1Out.value;
+            if (SUCCEEDED(hr)) {
+                Out<ID3D11DeviceContext1> pImmediateContext1Out = new Out<ID3D11DeviceContext1>();
+                g_pImmediateContext.QueryInterface(ID3D11DeviceContext1.__uuid, D3D11DeviceContext1Impl.class,
+                        pImmediateContext1Out);
+                g_pImmediateContext1 = pImmediateContext1Out.value;
+            }
+
+            DXGI_SWAP_CHAIN_DESC1 sd = new DXGI_SWAP_CHAIN_DESC1();
+            sd.Width = window.getClientWidth();
+            sd.Height = window.getClientHeight();
+            sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.SampleDesc.Count = 1;
+            sd.SampleDesc.Quality = 0;
+            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            sd.BufferCount = 1;
+
+            Out<IDXGISwapChain1> swapChainOut = new Out<IDXGISwapChain1>();
+            hr = dxgiFactory2.CreateSwapChainForHwnd(g_pd3dDevice, window.getHwnd(), sd, null, null, swapChainOut);
+            if (SUCCEEDED(hr))
+            {
+                //hr = g_pSwapChain1->QueryInterface( __uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain) );
+            }
+            dxgiFactory2.Release();
+        }
 
         return 0;
     }

@@ -11,19 +11,43 @@ public class COM {
         Sys.touch();
     }
 
-    public static final native void __uuidof_IDXGIDevice0(long uuidOutPtr);
+    public static final native void n__uuidof_IDXGIDevice(long uuidOutPtr);
 
-    public static final native void __uuidof_IDXGIFactory10(long uuidOutPtr);
+    public static final native void n__uuidof_IDXGIFactory1(long uuidOutPtr);
+
+    public static final native void n__uuidof_IDXGIFactory2(long uuidOutPtr);
+
+    public static final native void n__uuidof_ID3D11Device1(long uuidOutPtr);
+
+    public static final native void n__uuidof_ID3D11DeviceContext1(long uuidOutPtr);
 
     public static GUID __uuidof_IDXGIDevice() {
         ByteBuffer bb = GUID.malloc();
-        __uuidof_IDXGIDevice0(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGIDevice(MemoryUtil.memAddressSafe(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_IDXGIFactory1() {
         ByteBuffer bb = GUID.malloc();
-        __uuidof_IDXGIFactory10(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGIFactory1(MemoryUtil.memAddressSafe(bb));
+        return new GUID(bb);
+    }
+
+    public static GUID __uuidof_IDXGIFactory2() {
+        ByteBuffer bb = GUID.malloc();
+        n__uuidof_IDXGIFactory2(MemoryUtil.memAddressSafe(bb));
+        return new GUID(bb);
+    }
+
+    public static GUID __uuidof_ID3D11Device1() {
+        ByteBuffer bb = GUID.malloc();
+        n__uuidof_ID3D11Device1(MemoryUtil.memAddressSafe(bb));
+        return new GUID(bb);
+    }
+
+    public static GUID __uuidof_ID3D11DeviceContext1() {
+        ByteBuffer bb = GUID.malloc();
+        n__uuidof_ID3D11DeviceContext1(MemoryUtil.memAddressSafe(bb));
         return new GUID(bb);
     }
 

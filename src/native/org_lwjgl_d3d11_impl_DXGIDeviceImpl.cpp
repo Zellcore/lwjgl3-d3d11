@@ -9,10 +9,10 @@ extern "C" {
 #endif
     /*
     * Class:     org_lwjgl_d3d11_impl_DXGIDeviceImpl
-    * Method:    GetAdapter0
+    * Method:    nGetAdapter
     * Signature: (JJ)J
     */
-    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_DXGIDeviceImpl_GetAdapter0
+    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_DXGIDeviceImpl_nGetAdapter
         (JNIEnv * env, jclass clazz, jlong thisPtr, jlong adapterOutPtr) {
         IDXGIDevice* device = (IDXGIDevice*)(intptr_t)thisPtr;
         IDXGIAdapter** adapter = (IDXGIAdapter**)(intptr_t)adapterOutPtr;

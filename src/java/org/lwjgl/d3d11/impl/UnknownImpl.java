@@ -31,19 +31,19 @@ public class UnknownImpl extends NativeObjectImpl implements IUnknown {
      * 
      * @param ptr
      */
-    public static final native void Release0(long thisPtr);
+    public static final native void nRelease(long thisPtr);
 
-    public static final native long QueryInterface0(long thisPtr, long guidPtr, long objectOutPtr);
+    public static final native long nQueryInterface(long thisPtr, long guidPtr, long objectOutPtr);
 
     @Override
     public void Release() {
-        Release0(ptr);
+        nRelease(ptr);
     }
 
     @Override
     public <T> long QueryInterface(GUID riid, Class<? extends T> clazz, Out<T> objectOut) {
         PointerBuffer pb = BufferUtils.createPointerBuffer(1);
-        long res = QueryInterface0(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddressSafe(pb));
+        long res = nQueryInterface(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddressSafe(pb));
         if (winerror.SUCCEEDED(res)) {
             try {
                 Constructor<? extends T> ctor = clazz.getConstructor(long.class);

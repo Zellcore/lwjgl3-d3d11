@@ -9,10 +9,10 @@ extern "C" {
 #endif
     /*
     * Class:     org_lwjgl_d3d11_impl_UnknownImpl
-    * Method:    Release0
+    * Method:    nRelease
     * Signature: (J)V
     */
-    JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_Release0
+    JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nRelease
         (JNIEnv * env, jclass clazz, jlong thisPtr) {
         IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
         obj->Release();
@@ -20,10 +20,10 @@ extern "C" {
 
     /*
     * Class:     org_lwjgl_d3d11_impl_UnknownImpl
-    * Method:    QueryInterface0
+    * Method:    nQueryInterface
     * Signature: (JJ)J
     */
-    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_QueryInterface0
+    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nQueryInterface
         (JNIEnv * env, jclass clazz, jlong thisPtr, jlong guidPtr, jlong objectOutPtr) {
         IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
         const IID* guid = (IID*)(intptr_t)guidPtr;

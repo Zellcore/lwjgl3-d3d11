@@ -15,11 +15,11 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
         Sys.touch();
     }
 
-    D3D11DeviceImpl(long ptr) {
+    public D3D11DeviceImpl(long ptr) {
         super(ptr);
     }
 
-    private static final native long CreateBuffer0(long bufferDescPtr, long bufferAddr);
+    private static final native long nCreateBuffer(long bufferDescPtr, long bufferAddr);
 
     public long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer) {
         ByteBuffer bufferDesc = BufferUtils.createByteBuffer(StructUtils.sizeof(D3D11_BUFFER_DESC.class));
@@ -27,7 +27,7 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
         bufferDesc.flip();
         D3D11BufferImpl bufferImpl = (D3D11BufferImpl) buffer;
         long bufferAddr = bufferImpl.ptr;
-        return CreateBuffer0(MemoryUtil.memAddressSafe(bufferDesc), bufferAddr);
+        return nCreateBuffer(MemoryUtil.memAddressSafe(bufferDesc), bufferAddr);
     }
 
 }

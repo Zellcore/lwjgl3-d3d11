@@ -16,12 +16,12 @@ public class DXGIObjectImpl extends UnknownImpl implements IDXGIObject {
         super(ptr);
     }
 
-    public static final native long GetParent0(long thisPtr, long guidPtr, long objectOutPtr);
+    public static final native long nGetParent(long thisPtr, long guidPtr, long objectOutPtr);
 
     @Override
     public <T> long GetParent(GUID riid, Class<? extends T> clazz, Out<T> objectOut) {
         PointerBuffer pb = BufferUtils.createPointerBuffer(1);
-        long res = GetParent0(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddressSafe(pb));
+        long res = nGetParent(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddressSafe(pb));
         if (winerror.SUCCEEDED(res)) {
             try {
                 Constructor<? extends T> ctor = clazz.getConstructor(long.class);

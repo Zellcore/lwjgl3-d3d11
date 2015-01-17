@@ -8,11 +8,11 @@ public class DXGISwapChainImpl extends DXGIDeviceSubObjectImpl implements IDXGIS
         super(ptr);
     }
 
-    public static final native void Present0(int syncInterval, int flags);
+    public static final native void nPresent(int syncInterval, int flags);
 
     @Override
     public void Present(int syncInterval, int flags) {
-        Present0(syncInterval, flags);
+        nPresent(syncInterval, flags);
     }
 
 }

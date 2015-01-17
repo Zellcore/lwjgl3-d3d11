@@ -9,10 +9,10 @@ extern "C" {
 #endif
     /*
     * Class:     org_lwjgl_d3d11_impl_D3D11
-    * Method:    D3D11CreateDevice0
+    * Method:    nD3D11CreateDevice
     * Signature: (JIJIIJIJJJ)J
     */
-    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11_D3D11CreateDevice0
+    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11_nD3D11CreateDevice
         (JNIEnv * env, jclass clazz, jlong adapterPtr, jint driverType, 
         jlong hmodule_Software, jint flags, jint numFeatureLevels, jlong featureLevelsPtr, 
         jint sdkVersion, jlong ppDeviceAddr, jlong pFeatureLevelAddr, jlong ppImmediateContextAddr) {
