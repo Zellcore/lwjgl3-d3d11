@@ -1,15 +1,15 @@
 package org.lwjgl.d3d11;
 
+/**
+ * Represents an out-parameter of a method that is a pointer to a struct, class
+ * instance or an enum literal.
+ * 
+ * @author kai
+ *
+ * @param <E>
+ */
 public class Out<E> {
 
-    private E value;
-
-    public void set(E value) {
-        this.value = value;
-    }
-
-    public E get() {
-        return this.value;
-    }
+    public E value;
 
 }

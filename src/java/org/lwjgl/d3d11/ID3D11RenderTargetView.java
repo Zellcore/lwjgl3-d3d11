@@ -1,5 +1,5 @@
 package org.lwjgl.d3d11;
 
-public class ID3D11RenderTargetView {
+public interface ID3D11RenderTargetView {
 
 }

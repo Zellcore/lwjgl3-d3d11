@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public interface DXGISwapChainFlag {
+public interface DXGI_SWAP_CHAIN_FLAG {
 
     int DXGI_SWAP_CHAIN_FLAG_NONPREROTATED = 1;
     int DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH = 2;

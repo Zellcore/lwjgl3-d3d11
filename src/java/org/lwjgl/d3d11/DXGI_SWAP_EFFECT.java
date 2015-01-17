@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum DXGISwapEffect {
+public enum DXGI_SWAP_EFFECT {
 
     DXGI_SWAP_EFFECT_DISCARD,
     DXGI_SWAP_EFFECT_SEQUENTIAL,
@@ -8,11 +8,11 @@ public enum DXGISwapEffect {
 
     private final int value;
 
-    DXGISwapEffect() {
+    DXGI_SWAP_EFFECT() {
         this.value = ordinal();
     }
 
-    DXGISwapEffect(int value) {
+    DXGI_SWAP_EFFECT(int value) {
         this.value = value;
     }
 

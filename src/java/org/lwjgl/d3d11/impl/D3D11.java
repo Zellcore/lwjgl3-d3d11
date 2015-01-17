@@ -5,9 +5,9 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
-import org.lwjgl.d3d11.D3DDriverType;
-import org.lwjgl.d3d11.D3DFeatureLevel;
-import org.lwjgl.d3d11.DXGISwapChainDesc;
+import org.lwjgl.d3d11.D3D_DRIVER_TYPE;
+import org.lwjgl.d3d11.D3D_FEATURE_LEVEL;
+import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC;
 import org.lwjgl.d3d11.ID3D11Device;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
 import org.lwjgl.d3d11.IDXGIAdapter;
@@ -26,10 +26,10 @@ public class D3D11 {
             IntBuffer featureLevelOut, PointerBuffer immediateContextOut);
 
     public static long D3D11CreateDeviceAndSwapChain(IDXGIAdapter adapter,
-            D3DDriverType driverType, long softwareRasterizerModuleHandle,
-            int flags, D3DFeatureLevel[] featureLevels, int sdkVersion,
-            DXGISwapChainDesc swapChainDesc, Out<IDXGISwapChain> swapChainOut,
-            Out<ID3D11Device> deviceOut, Out<D3DFeatureLevel> featureLevelOut,
+            D3D_DRIVER_TYPE driverType, long softwareRasterizerModuleHandle,
+            int flags, D3D_FEATURE_LEVEL[] featureLevels, int sdkVersion,
+            DXGI_SWAP_CHAIN_DESC swapChainDesc, Out<IDXGISwapChain> swapChainOut,
+            Out<ID3D11Device> deviceOut, Out<D3D_FEATURE_LEVEL> featureLevelOut,
             Out<ID3D11DeviceContext> immediateContextOut) {
         IntBuffer featureLevelsBuffer = Memory.acquire(4 * featureLevels.length)
                 .asIntBuffer();
@@ -38,7 +38,7 @@ public class D3D11 {
         }
         featureLevelsBuffer.flip();
         ByteBuffer swapChainDescBuffer = BufferUtils
-                .createByteBuffer(DXGISwapChainDesc.SIZEOF);
+                .createByteBuffer(DXGI_SWAP_CHAIN_DESC.SIZEOF);
         swapChainDesc.writeInto(swapChainDescBuffer);
         swapChainDescBuffer.flip();
         PointerBuffer swapChainOutBuffer = BufferUtils.createPointerBuffer(1);
@@ -55,7 +55,7 @@ public class D3D11 {
                 swapChainOutBuffer.get(0));
         ID3D11Device device = deviceOutBuffer.get(0) != 0L ? new D3D11DeviceImpl(
                 deviceOutBuffer.get(0)) : null;
-        D3DFeatureLevel featureLevel = D3DFeatureLevel.values()[featureLevelOutBuffer
+        D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL.values()[featureLevelOutBuffer
                 .get(0)];
         ID3D11DeviceContext immediateContext = immediateContextOutBuffer.get(0) != 0L ? new D3D11DeviceContextImpl(
                 immediateContextOutBuffer.get(0)) : null;

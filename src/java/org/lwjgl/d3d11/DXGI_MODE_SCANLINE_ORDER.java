@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum DXGIModeScanlineOrder {
+public enum DXGI_MODE_SCANLINE_ORDER {
 
     DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
     DXGI_MODE_SCANLINE_ORDER_PROGRESSIVE,

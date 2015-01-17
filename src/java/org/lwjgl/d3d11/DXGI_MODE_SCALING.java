@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum DXGIModeScaling {
+public enum DXGI_MODE_SCALING {
 
     DXGI_MODE_SCALING_UNSPECIFIED,
     DXGI_MODE_SCALING_CENTERED,

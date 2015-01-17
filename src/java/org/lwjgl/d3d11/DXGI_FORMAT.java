@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum DXGIFormat {
+public enum DXGI_FORMAT {
 
     DXGI_FORMAT_UNKNOWN,
     DXGI_FORMAT_R32G32B32A32_TYPELESS,
@@ -120,19 +120,15 @@ public enum DXGIFormat {
     DXGI_FORMAT_B4G4R4A4_UNORM,
     DXGI_FORMAT_FORCE_UINT(0xffffffff);
 
-    private final int value;
+    public final int value;
 
-    private DXGIFormat() {
+    private DXGI_FORMAT() {
         int ord = ordinal();
         value = ord;
     }
 
-    private DXGIFormat(int value) {
+    private DXGI_FORMAT(int value) {
         this.value = value;
-    }
-
-    public int getValue() {
-        return value;
     }
 
 }

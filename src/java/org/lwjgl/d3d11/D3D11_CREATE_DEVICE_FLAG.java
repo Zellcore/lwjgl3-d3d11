@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public interface D3D11CreateDeviceFlag {
+public interface D3D11_CREATE_DEVICE_FLAG {
 
     int D3D11_CREATE_DEVICE_SINGLETHREADED = 0x01;
     int D3D11_CREATE_DEVICE_DEBUG = 0x2;

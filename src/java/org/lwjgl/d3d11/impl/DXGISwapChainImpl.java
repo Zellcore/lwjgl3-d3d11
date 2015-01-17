@@ -11,4 +11,11 @@ public class DXGISwapChainImpl implements IDXGISwapChain {
         this.ptr = ptr;
     }
 
+    public static final native void Present0(int syncInterval, int flags);
+
+    @Override
+    public void Present(int syncInterval, int flags) {
+        Present0(syncInterval, flags);
+    }
+
 }

@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public class DXGISampleDesc {
+public class DXGI_SAMPLE_DESC {
 
     public static final int SIZEOF = 2 * 4;
 

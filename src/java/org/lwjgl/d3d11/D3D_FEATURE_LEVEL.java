@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum D3DFeatureLevel {
+public enum D3D_FEATURE_LEVEL {
 
     D3D_FEATURE_LEVEL_9_1(0x9100),
     D3D_FEATURE_LEVEL_9_2(0x9200),
@@ -12,7 +12,7 @@ public enum D3DFeatureLevel {
 
     private final int value;
 
-    D3DFeatureLevel(int value) {
+    D3D_FEATURE_LEVEL(int value) {
         this.value = value;
     }
 

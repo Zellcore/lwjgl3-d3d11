@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11;
 
-public enum D3DDriverType {
+public enum D3D_DRIVER_TYPE {
 
     D3D_DRIVER_TYPE_UNKNOWN,
     D3D_DRIVER_TYPE_HARDWARE,

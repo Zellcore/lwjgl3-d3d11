@@ -11,4 +11,9 @@ public class D3D11BufferImpl implements ID3D11Buffer {
         this.ptr = ptr;
     }
 
+    @Override
+    public void release() {
+        UnknownImpl.release0(ptr);
+    }
+
 }
