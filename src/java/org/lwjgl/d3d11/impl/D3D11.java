@@ -16,7 +16,7 @@ import org.lwjgl.d3d11.Out;
 import org.lwjgl.system.MemoryUtil;
 
 public class D3D11 {
-    
+
     static {
         Sys.touch();
     }
@@ -40,7 +40,7 @@ public class D3D11 {
         PointerBuffer ppDeviceBuffer = BufferUtils.createPointerBuffer(1);
         IntBuffer selectedFeatureLevelBuffer = BufferUtils.createIntBuffer(1);
         PointerBuffer ppImmediateContextBuffer = BufferUtils.createPointerBuffer(1);
-        long res = D3D11CreateDevice0(adapterPtr, DriverType.value, hmodule_Software, Flags,
+        long res = D3D11CreateDevice0(adapterPtr, DriverType.ordinal(), hmodule_Software, Flags,
                 featureLevelsBuffer.remaining() / 4, MemoryUtil.memAddressSafe(featureLevelsBuffer), SDKVersion,
                 MemoryUtil.memAddressSafe(ppDeviceBuffer), MemoryUtil.memAddressSafe(selectedFeatureLevelBuffer),
                 MemoryUtil.memAddressSafe(ppImmediateContextBuffer));

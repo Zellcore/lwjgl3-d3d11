@@ -2,11 +2,11 @@ package org.lwjgl.d3d11;
 
 public class D3D11_BUFFER_DESC implements Struct {
 
-    int ByteWidth;
-    D3D11_USAGE Usage;
-    int BindFlags;
-    int CPUAccessFlags;
-    int MiscFlags;
-    int StructureByteStride;
+    public int ByteWidth;
+    public D3D11_USAGE Usage;
+    public int BindFlags;
+    public int CPUAccessFlags;
+    public int MiscFlags;
+    public int StructureByteStride;
 
 }

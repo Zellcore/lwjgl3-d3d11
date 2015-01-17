@@ -13,6 +13,8 @@ import static org.lwjgl.d3d11.winerror.*;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.d3d11.impl.DXGIDeviceImpl;
+import org.lwjgl.d3d11.impl.DXGIFactory1Impl;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
 
@@ -71,15 +73,9 @@ public class Tutorial01 {
     private long InitDevice() {
         int createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
 
-        D3D_DRIVER_TYPE[] driverTypes = { 
-                D3D_DRIVER_TYPE_HARDWARE, 
-                D3D_DRIVER_TYPE_WARP, 
-                D3D_DRIVER_TYPE_REFERENCE };
+        D3D_DRIVER_TYPE[] driverTypes = { D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_REFERENCE };
 
-        D3D_FEATURE_LEVEL[] featureLevels = { 
-                D3D_FEATURE_LEVEL_11_1,
-                D3D_FEATURE_LEVEL_11_0, 
-                D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL[] featureLevels = { D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1,
                 D3D_FEATURE_LEVEL_10_0 };
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = new DXGI_SWAP_CHAIN_DESC();
@@ -107,6 +103,31 @@ public class Tutorial01 {
                     featureLevel, immediateContext);
             if (SUCCEEDED(hr))
                 break;
+        }
+        if (FAILED(hr))
+            return hr;
+        g_pd3dDevice = device.value;
+
+        // Obtain DXGI factory from device (since we used nullptr for pAdapter above)
+        IDXGIFactory1 dxgiFactory = null;
+        {
+            IDXGIDevice dxgiDevice = null;
+            Out<IDXGIDevice> dxgiDeviceOut = new Out<IDXGIDevice>();
+            hr = g_pd3dDevice.QueryInterface(IDXGIDevice.__uuid, DXGIDeviceImpl.class, dxgiDeviceOut);
+            dxgiDevice = dxgiDeviceOut.value;
+            if (SUCCEEDED(hr)) {
+                IDXGIAdapter adapter = null;
+                Out<IDXGIAdapter> adapterOut = new Out<IDXGIAdapter>();
+                hr = dxgiDevice.GetAdapter(adapterOut);
+                adapter = adapterOut.value;
+                if (SUCCEEDED(hr)) {
+                    Out<IDXGIFactory1> dxgiFactoryOut = new Out<IDXGIFactory1>();
+                    hr = adapter.GetParent(IDXGIFactory1.__uuid, DXGIFactory1Impl.class, dxgiFactoryOut);
+                    dxgiFactory = dxgiFactoryOut.value;
+                    adapter.Release();
+                }
+                dxgiDevice.Release();
+            }
         }
         if (FAILED(hr))
             return hr;

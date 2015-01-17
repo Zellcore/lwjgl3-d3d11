@@ -131,4 +131,13 @@ public enum DXGI_FORMAT {
         this.value = value;
     }
 
+    public static DXGI_FORMAT byValue(int val) {
+        if (val < 0xffffffff) {
+            return values()[val];
+        } else if (val == 0xffffffff) {
+            return DXGI_FORMAT_FORCE_UINT;
+        }
+        return null;
+    }
+
 }

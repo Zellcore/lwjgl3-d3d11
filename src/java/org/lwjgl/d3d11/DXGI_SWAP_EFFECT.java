@@ -6,7 +6,7 @@ public enum DXGI_SWAP_EFFECT {
     DXGI_SWAP_EFFECT_SEQUENTIAL,
     DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL(3);
 
-    private final int value;
+    public final int value;
 
     DXGI_SWAP_EFFECT() {
         this.value = ordinal();
@@ -16,8 +16,13 @@ public enum DXGI_SWAP_EFFECT {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
+    public static DXGI_SWAP_EFFECT byValue(int val) {
+        for (DXGI_SWAP_EFFECT f : values()) {
+            if (f.value == val) {
+                return f;
+            }
+        }
+        return null;
     }
 
 }
