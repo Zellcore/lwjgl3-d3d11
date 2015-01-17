@@ -27,43 +27,43 @@ public class COM {
 
     public static GUID __uuidof_IDXGIDevice() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_IDXGIDevice(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGIDevice(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_IDXGIFactory1() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_IDXGIFactory1(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGIFactory1(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_IDXGIFactory2() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_IDXGIFactory2(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGIFactory2(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_ID3D11Device1() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_ID3D11Device1(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_ID3D11Device1(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_ID3D11DeviceContext1() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_ID3D11DeviceContext1(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_ID3D11DeviceContext1(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_IDXGISwapChain() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_IDXGISwapChain(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_IDXGISwapChain(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
     public static GUID __uuidof_ID3D11Texture2D() {
         ByteBuffer bb = GUID.malloc();
-        n__uuidof_ID3D11Texture2D(MemoryUtil.memAddressSafe(bb));
+        n__uuidof_ID3D11Texture2D(MemoryUtil.memAddress(bb));
         return new GUID(bb);
     }
 
