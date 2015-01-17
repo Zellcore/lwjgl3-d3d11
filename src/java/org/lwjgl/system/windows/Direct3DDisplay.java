@@ -44,7 +44,7 @@ public class Direct3DDisplay {
 
 	private boolean closeRequested;
 
-	public Direct3DDisplay(String title, int clientWidth, int clientHeight) {
+	public Direct3DDisplay(String title, int clientWidth, int clientHeight, int style) {
 		this.id = WINDOW_ID.incrementAndGet();
 
 		this.defaultWndProc = new WindowProcImpl();
@@ -67,12 +67,13 @@ public class Direct3DDisplay {
 		rc.setLeft(0);
 		rc.setRight(clientWidth);
 		rc.setBottom(clientHeight);
-		AdjustWindowRectEx(rectBuffer, WS_OVERLAPPEDWINDOW, 0, 0);
+		AdjustWindowRectEx(rectBuffer, style, 0, 0);
 		this.width = rc.getRight() - rc.getLeft();
 		this.height = rc.getBottom() - rc.getTop();
 
 		/* Create window */
-		hwnd = CreateWindowEx(WS_EX_APPWINDOW, className, title, WS_OVERLAPPEDWINDOW, 0, 0, this.width, this.height,
+		hwnd = CreateWindowEx(WS_EX_APPWINDOW, className, title,  
+                style, 0, 0, this.width, this.height,
 				NULL, NULL, HINSTANCE, defaultWndProc.getPointer());
 		windowsCheckHandle(hwnd, "Failed to create window");
 

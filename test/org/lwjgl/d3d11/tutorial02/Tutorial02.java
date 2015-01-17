@@ -133,7 +133,8 @@ public class Tutorial02 {
     }
 
     private long InitWindow() {
-        window = new Direct3DDisplay("Direct3D 11 Tutorial 1: Direct3D 11 Basics", 800, 600);
+        window = new Direct3DDisplay("Direct3D 11 Tutorial 1: Direct3D 11 Basics", 800, 600, WS_OVERLAPPED | WS_CAPTION
+                | WS_SYSMENU | WS_MINIMIZEBOX);
         window.setVisible(true);
         return 0L;
     }
