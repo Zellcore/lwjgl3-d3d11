@@ -1,11 +1,11 @@
 package org.lwjgl.d3d11.impl;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.IDXGIAdapter;
 import org.lwjgl.d3d11.IDXGIDevice;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
+import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.system.MemoryUtil;
 
 public class DXGIDeviceImpl extends DXGIObjectImpl implements IDXGIDevice {
@@ -22,7 +22,7 @@ public class DXGIDeviceImpl extends DXGIObjectImpl implements IDXGIDevice {
 
     @Override
     public long GetAdapter(Out<IDXGIAdapter> adapterOut) {
-        PointerBuffer pb = BufferUtils.createPointerBuffer(1);
+        PointerBuffer pb = BufferPool.pointerBuffer(1);
         long res = nGetAdapter(ptr, MemoryUtil.memAddressSafe(pb));
         if (winerror.SUCCEEDED(res)) {
             IDXGIAdapter adapter = new DXGIAdapterImpl(pb.get(0));

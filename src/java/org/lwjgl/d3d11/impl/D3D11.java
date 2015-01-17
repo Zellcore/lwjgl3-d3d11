@@ -33,17 +33,17 @@ public class D3D11 {
         DXGIAdapterImpl pAdapterImpl = (DXGIAdapterImpl) pAdapter;
         long adapterPtr = pAdapterImpl != null ? pAdapterImpl.ptr : 0L;
         ByteBuffer featureLevelsBuffer = BufferUtils.createByteBuffer(4 * pFeatureLevels.length);
-        IntBuffer featureLevelsIntBuffer = featureLevelsBuffer.asIntBuffer();
         for (D3D_FEATURE_LEVEL fl : pFeatureLevels) {
-            featureLevelsIntBuffer.put(fl.value);
+            featureLevelsBuffer.putInt(fl.value);
         }
+        featureLevelsBuffer.rewind();
         PointerBuffer ppDeviceBuffer = BufferUtils.createPointerBuffer(1);
         IntBuffer selectedFeatureLevelBuffer = BufferUtils.createIntBuffer(1);
         PointerBuffer ppImmediateContextBuffer = BufferUtils.createPointerBuffer(1);
         long res = nD3D11CreateDevice(adapterPtr, DriverType.ordinal(), hmodule_Software, Flags,
-                featureLevelsBuffer.remaining() / 4, MemoryUtil.memAddressSafe(featureLevelsBuffer), SDKVersion,
-                MemoryUtil.memAddressSafe(ppDeviceBuffer), MemoryUtil.memAddressSafe(selectedFeatureLevelBuffer),
-                MemoryUtil.memAddressSafe(ppImmediateContextBuffer));
+                featureLevelsBuffer.remaining() / 4, MemoryUtil.memAddress(featureLevelsBuffer), SDKVersion,
+                MemoryUtil.memAddress(ppDeviceBuffer), MemoryUtil.memAddress(selectedFeatureLevelBuffer),
+                MemoryUtil.memAddress(ppImmediateContextBuffer));
         if (SUCCEEDED(res)) {
             ID3D11Device device = new D3D11DeviceImpl(ppDeviceBuffer.get(0));
             D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL.byValue(selectedFeatureLevelBuffer.get(0));

@@ -2,12 +2,12 @@ package org.lwjgl.d3d11.impl;
 
 import java.lang.reflect.Constructor;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.GUID;
 import org.lwjgl.d3d11.IUnknown;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
+import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.system.MemoryUtil;
 
 /**
@@ -42,8 +42,8 @@ public class UnknownImpl extends NativeObjectImpl implements IUnknown {
 
     @Override
     public <T> long QueryInterface(GUID riid, Class<? extends T> clazz, Out<T> objectOut) {
-        PointerBuffer pb = BufferUtils.createPointerBuffer(1);
-        long res = nQueryInterface(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddressSafe(pb));
+        PointerBuffer pb = BufferPool.pointerBuffer(1);
+        long res = nQueryInterface(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddress(pb));
         if (winerror.SUCCEEDED(res)) {
             try {
                 Constructor<? extends T> ctor = clazz.getConstructor(long.class);
