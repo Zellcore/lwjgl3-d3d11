@@ -12,5 +12,5 @@ For the time being, I will not use the Kotlin generator language provided by LWJ
 
 Naming conventions
 ----
-All structs, classes and enums in the D3D11 C++ API will keep their names in their Java pendants. Also I want to keep the names like they are in the original C++ API with CamelCase. That will also allow people to easily move from C++ to Java/LWJGL3 (and vice versa).
+All structs, classes and enums in the D3D11 C++ API will keep their names in their Java pendants. Also I want to keep the method names and the names like they are in the original C++ API with CamelCase. That will also allow people to easily move from C++ to Java/LWJGL3 (and vice versa).
 
