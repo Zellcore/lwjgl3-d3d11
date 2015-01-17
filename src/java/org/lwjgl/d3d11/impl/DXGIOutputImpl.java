@@ -1,6 +1,6 @@
 package org.lwjgl.d3d11.impl;
 
-import org.lwjgl.IDXGIOutput;
+import org.lwjgl.d3d11.IDXGIOutput;
 
 public class DXGIOutputImpl extends DXGIObjectImpl implements IDXGIOutput {
 

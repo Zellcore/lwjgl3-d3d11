@@ -2,12 +2,12 @@ package org.lwjgl.d3d11.impl;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.IDXGIOutput;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC1;
 import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_FULLSCREEN_DESC;
 import org.lwjgl.d3d11.ID3D11Device;
 import org.lwjgl.d3d11.IDXGIFactory2;
+import org.lwjgl.d3d11.IDXGIOutput;
 import org.lwjgl.d3d11.IDXGISwapChain1;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;

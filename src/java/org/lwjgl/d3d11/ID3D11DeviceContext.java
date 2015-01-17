@@ -1,6 +1,5 @@
 package org.lwjgl.d3d11;
 
-import org.lwjgl.ID3D11DepthStencilView;
 
 public interface ID3D11DeviceContext extends ID3D11DeviceChild {
 

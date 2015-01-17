@@ -1,6 +1,5 @@
-package org.lwjgl;
+package org.lwjgl.d3d11;
 
-import org.lwjgl.d3d11.ID3D11View;
 
 public interface ID3D11DepthStencilView extends ID3D11View {
 

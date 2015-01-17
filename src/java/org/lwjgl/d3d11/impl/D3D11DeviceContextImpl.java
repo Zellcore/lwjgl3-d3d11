@@ -2,9 +2,9 @@ package org.lwjgl.d3d11.impl;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.ID3D11DepthStencilView;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
+import org.lwjgl.d3d11.ID3D11DepthStencilView;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
 import org.lwjgl.d3d11.ID3D11RenderTargetView;
 import org.lwjgl.d3d11.util.BufferPool;

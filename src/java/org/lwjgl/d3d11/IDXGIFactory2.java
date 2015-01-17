@@ -1,6 +1,5 @@
 package org.lwjgl.d3d11;
 
-import org.lwjgl.IDXGIOutput;
 import org.lwjgl.d3d11.impl.COM;
 
 public interface IDXGIFactory2 extends IDXGIFactory1 {

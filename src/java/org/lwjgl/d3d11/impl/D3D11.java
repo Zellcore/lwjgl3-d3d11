@@ -23,7 +23,7 @@ public class D3D11 {
 
     public static final int D3D11_SDK_VERSION = 7;
 
-    private static final native long nD3D11CreateDevice(long adapterPtr, int driverType, long hmodule_Software,
+    public static final native long nD3D11CreateDevice(long adapterPtr, int driverType, long hmodule_Software,
             int flags, int numFeatureLevels, long featureLevelsPtr, int sdkVersion, long ppDevicePtr,
             long pFeatureLevel, long ppImmediateContextPtr);
 
