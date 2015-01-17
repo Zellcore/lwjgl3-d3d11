@@ -2,10 +2,8 @@ package org.lwjgl.d3d11;
 
 import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
 import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
-import static org.lwjgl.d3d11.DXGI_SWAP_CHAIN_FLAG.*;
 import static org.lwjgl.d3d11.impl.D3D11.*;
 import static org.lwjgl.d3d11.DXGI_FORMAT.*;
-import static org.lwjgl.d3d11.DXGI_SWAP_EFFECT.*;
 import static org.lwjgl.d3d11.DXGI.*;
 import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
 import static org.lwjgl.system.windows.WinUser.*;
@@ -83,21 +81,6 @@ public class Tutorial01 {
 
         D3D_FEATURE_LEVEL[] featureLevels = { D3D_FEATURE_LEVEL_11_1, D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1,
                 D3D_FEATURE_LEVEL_10_0 };
-
-        DXGI_SWAP_CHAIN_DESC swapChainDesc = new DXGI_SWAP_CHAIN_DESC();
-        swapChainDesc.BufferCount = 1;
-        swapChainDesc.BufferDesc.Width = window.getClientWidth();
-        swapChainDesc.BufferDesc.Height = window.getClientHeight();
-        swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-        swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
-        swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
-        swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        swapChainDesc.OutputWindow = window.getHwnd();
-        swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-        swapChainDesc.Windowed = true;
-        swapChainDesc.SampleDesc.Count = 1;
-        swapChainDesc.SampleDesc.Quality = 0;
-        swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
         long hr = 0;
         Out<ID3D11Device> deviceOut = new Out<ID3D11Device>();
