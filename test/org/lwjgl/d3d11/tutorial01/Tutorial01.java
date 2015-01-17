@@ -223,7 +223,7 @@ public class Tutorial01 {
 
     private void Render() {
         // Just clear the backbuffer
-        g_pImmediateContext.ClearRenderTargetView(g_pRenderTargetView, DirectXColors.MidnightBlue);
+        g_pImmediateContext.ClearRenderTargetView(g_pRenderTargetView, DirectXColors.CornflowerBlue);
         g_pSwapChain.Present(0, 0);
     }
 
