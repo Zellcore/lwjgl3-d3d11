@@ -6,13 +6,14 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
 import org.lwjgl.d3d11.ID3D11RenderTargetView;
 
-public class D3D11DeviceContextImpl implements ID3D11DeviceContext {
+public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D11DeviceContext {
 
-    private final long ptr;
+    static {
+        Sys.touch();
+    }
 
     public D3D11DeviceContextImpl(long ptr) {
-        super();
-        this.ptr = ptr;
+        super(ptr);
     }
 
     public static final native void ClearRenderTargetView0(long renderTargetViewPtr, ByteBuffer colorBuffer);
