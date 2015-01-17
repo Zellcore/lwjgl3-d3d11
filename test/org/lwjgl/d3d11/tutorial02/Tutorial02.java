@@ -1,4 +1,4 @@
-package org.lwjgl.d3d11;
+package org.lwjgl.d3d11.tutorial02;
 
 import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
 import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
@@ -8,9 +8,35 @@ import static org.lwjgl.d3d11.DXGI.*;
 import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
 import static org.lwjgl.system.windows.WinUser.*;
 import static org.lwjgl.d3d11.winerror.*;
+import static org.lwjgl.d3d11.impl.d3dcompiler.*;
 
+import java.io.File;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
+import org.lwjgl.d3d11.D3D11_VIEWPORT;
+import org.lwjgl.d3d11.D3D_DRIVER_TYPE;
+import org.lwjgl.d3d11.D3D_FEATURE_LEVEL;
+import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC1;
+import org.lwjgl.d3d11.DirectXColors;
+import org.lwjgl.d3d11.ID3D11Buffer;
+import org.lwjgl.d3d11.ID3D11Device;
+import org.lwjgl.d3d11.ID3D11Device1;
+import org.lwjgl.d3d11.ID3D11DeviceContext;
+import org.lwjgl.d3d11.ID3D11DeviceContext1;
+import org.lwjgl.d3d11.ID3D11InputLayout;
+import org.lwjgl.d3d11.ID3D11PixelShader;
+import org.lwjgl.d3d11.ID3D11RenderTargetView;
+import org.lwjgl.d3d11.ID3D11Texture2D;
+import org.lwjgl.d3d11.ID3D11VertexShader;
+import org.lwjgl.d3d11.ID3DBlob;
+import org.lwjgl.d3d11.IDXGIAdapter;
+import org.lwjgl.d3d11.IDXGIDevice;
+import org.lwjgl.d3d11.IDXGIFactory1;
+import org.lwjgl.d3d11.IDXGIFactory2;
+import org.lwjgl.d3d11.IDXGISwapChain;
+import org.lwjgl.d3d11.IDXGISwapChain1;
+import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.impl.D3D11Device1Impl;
 import org.lwjgl.d3d11.impl.D3D11DeviceContext1Impl;
 import org.lwjgl.d3d11.impl.D3D11Texture2DImpl;
@@ -20,16 +46,19 @@ import org.lwjgl.d3d11.impl.DXGIFactory2Impl;
 import org.lwjgl.d3d11.impl.DXGISwapChainImpl;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
+import org.lwjgl.system.windows.WinError;
 
 /**
- * This is a port of the Tutorial01 from the <a
+ * This is a port of the Tutorial02 from the <a
  * href="https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef">Direct3D Tutorial Win32
  * Sample</a>.
  * 
  * @author kai
  *
  */
-public class Tutorial01 {
+public class Tutorial02 {
+
+    static final boolean _DEBUG = true;
 
     Direct3DDisplay window = null;
     D3D_DRIVER_TYPE g_driverType = D3D_DRIVER_TYPE_NULL;
@@ -41,8 +70,12 @@ public class Tutorial01 {
     IDXGISwapChain g_pSwapChain = null;
     IDXGISwapChain1 g_pSwapChain1 = null;
     ID3D11RenderTargetView g_pRenderTargetView = null;
+    ID3D11VertexShader g_pVertexShader = null;
+    ID3D11PixelShader g_pPixelShader = null;
+    ID3D11InputLayout g_pVertexLayout = null;
+    ID3D11Buffer g_pVertexBuffer = null;
 
-    private void winMain() {
+    private void winMain() throws URISyntaxException {
         if (FAILED(InitWindow())) {
             return;
         }
@@ -68,13 +101,44 @@ public class Tutorial01 {
         window.destroy();
     }
 
+    private int CompileShaderFromFile(File fileName, String entryPoint, String szShaderModel, Out<ID3DBlob> blobOut) {
+        int hr = WinError.S_OK;
+
+        int dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
+        if (_DEBUG) {
+            // Set the D3DCOMPILE_DEBUG flag to embed debug information in the shaders.
+            // Setting this flag improves the shader debugging experience, but still allows
+            // the shaders to be optimized and to run exactly the way they will run in
+            // the release configuration of this program.
+            dwShaderFlags |= D3DCOMPILE_DEBUG;
+
+            // Disable optimizations to further improve shader debugging
+            dwShaderFlags |= D3DCOMPILE_SKIP_OPTIMIZATION;
+        }
+
+        Out<ID3DBlob> pErrorBlob = new Out<ID3DBlob>();
+        hr = D3DCompileFromFile(fileName.getAbsolutePath(), null, null, entryPoint, szShaderModel, dwShaderFlags, 0,
+                blobOut, pErrorBlob);
+        if (FAILED(hr)) {
+            if (pErrorBlob.value != null) {
+                // FIXME kai: Add OutputDebugStringA(pErrorBlob.value.GetBufferPointer());
+                pErrorBlob.value.Release();
+            }
+            return hr;
+        }
+        if (pErrorBlob.value != null)
+            pErrorBlob.value.Release();
+
+        return WinError.S_OK;
+    }
+
     private long InitWindow() {
         window = new Direct3DDisplay("Direct3D 11 Tutorial 1: Direct3D 11 Basics", 800, 600);
         window.setVisible(true);
         return 0L;
     }
 
-    private long InitDevice() {
+    private long InitDevice() throws URISyntaxException {
         int createDeviceFlags = D3D11_CREATE_DEVICE_DEBUG;
 
         D3D_DRIVER_TYPE[] driverTypes = { D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_REFERENCE };
@@ -196,11 +260,23 @@ public class Tutorial01 {
         vp.TopLeftY = 0;
         g_pImmediateContext.RSSetViewports(new D3D11_VIEWPORT[] { vp });
 
+        // Compile the vertex shader
+        ID3DBlob pVSBlob = null;
+        Out<ID3DBlob> pVSBlobOut = new Out<ID3DBlob>();
+        hr = CompileShaderFromFile(new File(Tutorial02.class.getResource("Tutorial02.fx").toURI()), "VS", "vs_4_0",
+                pVSBlobOut);
+        pVSBlob = pVSBlobOut.value;
+        if (FAILED(hr)) {
+            System.err
+                    .println("The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+            return hr;
+        }
+
         return 0;
     }
 
     private void CleanupDevice() {
-        
+
     }
 
     private void Render() {
@@ -209,8 +285,8 @@ public class Tutorial01 {
         g_pSwapChain.Present(0, 0);
     }
 
-    public static void main(String[] args) {
-        new Tutorial01().winMain();
+    public static void main(String[] args) throws URISyntaxException {
+        new Tutorial02().winMain();
     }
 
 }

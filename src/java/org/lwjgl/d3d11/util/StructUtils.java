@@ -21,12 +21,9 @@ public class StructUtils {
             bb.putFloat(val);
         } else if (type == long.class) {
             long val = field.getLong(struct);
-            if (org.lwjgl.Pointer.POINTER_SIZE == 8) {
-                bb.putLong(val);
-            } else {
-                bb.putInt((int) val);
-            }
+            bb.putLong(val);
         } else if (type == boolean.class) {
+            /* BOOL in MSVC is actually defined as int! */
             byte val = field.getBoolean(struct) ? (byte) 1 : 0;
             bb.putInt(val);
         } else if (type instanceof Class) {
