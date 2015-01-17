@@ -14,23 +14,27 @@ extern "C" {
 #define org_lwjgl_d3d11_impl_D3D11_D3D11_SDK_VERSION 7L
     /*
     * Class:     org_lwjgl_d3d11_impl_D3D11
-    * Method:    D3D11CreateDeviceAndSwapChain0
-    * Signature: (JIJILjava/nio/IntBuffer;ILjava/nio/ByteBuffer;Lorg/lwjgl/PointerBuffer;Lorg/lwjgl/PointerBuffer;Ljava/nio/IntBuffer;Lorg/lwjgl/PointerBuffer;)J
+    * Method:    D3D11CreateDevice0
+    * Signature: (JIJIIJIJJJ)J
     */
-    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11_D3D11CreateDeviceAndSwapChain0
+    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11_D3D11CreateDevice0
         (JNIEnv * env, jclass clazz, jlong adapterPtr, jint driverType, 
-        jlong module, jint flags, jobject featureLevels, jint sdkVersion, 
-        jobject swapChainDesc, jobject swapChainOut, jobject deviceOut, 
-        jobject featureLevelOut, jobject immediateContextOut) {
-        return 0L;
+        jlong hmodule_Software, jint flags, jint numFeatureLevels, jlong featureLevelsPtr, 
+        jint sdkVersion, jlong ppDeviceAddr, jlong pFeatureLevelAddr, jlong ppImmediateContextAddr) {
+        IDXGIAdapter* adapter = (IDXGIAdapter*)(intptr_t)adapterPtr;
+        D3D_DRIVER_TYPE dt = (D3D_DRIVER_TYPE)driverType;
+        HMODULE software = (HMODULE)hmodule_Software;
+        UINT Flags = (UINT)flags;
+        const D3D_FEATURE_LEVEL* pFeatureLevels = (const D3D_FEATURE_LEVEL*)(intptr_t)featureLevelsPtr;
+        UINT FeatureLevels = (UINT)numFeatureLevels;
+        UINT SDKVersion = (UINT)sdkVersion;
+        ID3D11Device** ppDevice = (ID3D11Device**)(intptr_t)ppDeviceAddr;
+        D3D_FEATURE_LEVEL* pFeatureLevel = (D3D_FEATURE_LEVEL*)(intptr_t)pFeatureLevelAddr;
+        ID3D11DeviceContext** ppImmediateContext = (ID3D11DeviceContext **)(intptr_t)ppImmediateContextAddr;
+        HRESULT res = D3D11CreateDevice(adapter, dt, software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, ppDevice, pFeatureLevel, ppImmediateContext);
+        return (jlong) res;
     }
 
 #ifdef __cplusplus
 }
 #endif
-
-namespace lwjgl {
-    namespace d3d11 {
-
-    }
-}

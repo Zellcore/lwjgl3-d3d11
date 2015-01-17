@@ -9,4 +9,10 @@ public enum D3D_DRIVER_TYPE {
     D3D_DRIVER_TYPE_SOFTWARE,
     D3D_DRIVER_TYPE_WARP; 
 
+    public final int value;
+
+    D3D_DRIVER_TYPE() {
+        this.value = ordinal();
+    }
+
 }

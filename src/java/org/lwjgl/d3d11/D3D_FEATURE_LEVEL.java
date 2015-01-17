@@ -10,14 +10,19 @@ public enum D3D_FEATURE_LEVEL {
     D3D_FEATURE_LEVEL_11_0(0xb000),
     D3D_FEATURE_LEVEL_11_1(0xb100);
 
-    private final int value;
+    public final int value;
 
     D3D_FEATURE_LEVEL(int value) {
         this.value = value;
     }
 
-    public int getValue() {
-        return value;
+    public static D3D_FEATURE_LEVEL byValue(int val) {
+        for (D3D_FEATURE_LEVEL f : values()) {
+            if (f.value == val) {
+                return f;
+            }
+        }
+        return null;
     }
 
 }

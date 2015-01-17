@@ -10,6 +10,10 @@ import org.lwjgl.d3d11.IUnknown;
  */
 public class UnknownImpl {
 
+    static {
+        Sys.touch();
+    }
+
     /**
      * Release the COM instance with the given pointer.
      * 
