@@ -6,6 +6,8 @@ import static org.lwjgl.d3d11.DXGI_MODE_SCALING.*;
 
 public class DXGI_MODE_DESC {
 
+    public static final int SIZEOF = 28;
+
     public int Width;
     public int Height;
     public DXGI_RATIONAL RefreshRate = new DXGI_RATIONAL();

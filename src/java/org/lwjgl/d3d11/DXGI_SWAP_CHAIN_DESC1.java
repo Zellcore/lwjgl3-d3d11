@@ -1,10 +1,8 @@
 package org.lwjgl.d3d11;
 
-import java.nio.ByteBuffer;
+public class DXGI_SWAP_CHAIN_DESC1 implements Struct {
 
-public class DXGI_SWAP_CHAIN_DESC1 {
-
-    public ByteBuffer bb;
+    public static final int SIZEOF = 48;
 
     public int Width;
     public int Height;

@@ -1,5 +1,7 @@
 package org.lwjgl.d3d11.impl;
 
+import java.nio.ByteBuffer;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.IDXGIOutput;
 import org.lwjgl.PointerBuffer;
@@ -10,6 +12,7 @@ import org.lwjgl.d3d11.IDXGIFactory2;
 import org.lwjgl.d3d11.IDXGISwapChain1;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
+import org.lwjgl.d3d11.util.StructUtils;
 import org.lwjgl.system.MemoryUtil;
 
 public class DXGIFactory2Impl extends DXGIFactory1Impl implements IDXGIFactory2 {
@@ -31,7 +34,13 @@ public class DXGIFactory2Impl extends DXGIFactory1Impl implements IDXGIFactory2 
             Out<IDXGISwapChain1> swapChainOut) {
         D3D11DeviceImpl deviceImpl = (D3D11DeviceImpl) device;
         long devicePtr = deviceImpl != null ? deviceImpl.ptr : 0L;
-        long swapChainDescPtr = desc != null ? MemoryUtil.memAddressSafe(desc.bb) : 0L;
+        long swapChainDescPtr = 0L;
+        if (desc != null) {
+            ByteBuffer swapChainDescBuf = BufferUtils.createByteBuffer(DXGI_SWAP_CHAIN_DESC1.SIZEOF);
+            StructUtils.write(desc, swapChainDescBuf);
+            swapChainDescBuf.rewind();
+            swapChainDescPtr = MemoryUtil.memAddress(swapChainDescBuf);
+        }
         long swapChainFullscreenDescPtr = fullscreenDesc != null ? MemoryUtil.memAddressSafe(fullscreenDesc.bb) : 0L;
         DXGIOutputImpl outputImpl = (DXGIOutputImpl) restrictToOutput;
         long dxgiOutputPtr = outputImpl != null ? outputImpl.ptr : 0L;

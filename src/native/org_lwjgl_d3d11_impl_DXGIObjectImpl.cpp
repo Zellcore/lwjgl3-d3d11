@@ -19,7 +19,6 @@ extern "C" {
         void** outPtr = (void**)(intptr_t)objectOutPtr;
         return obj->GetParent(*guid, outPtr);
     }
-
 #ifdef __cplusplus
 }
 #endif

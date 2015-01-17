@@ -22,7 +22,7 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
     private static final native long nCreateBuffer(long bufferDescPtr, long bufferAddr);
 
     public long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer) {
-        ByteBuffer bufferDesc = BufferUtils.createByteBuffer(StructUtils.sizeof(D3D11_BUFFER_DESC.class));
+        ByteBuffer bufferDesc = BufferUtils.createByteBuffer(D3D11_BUFFER_DESC.SIZEOF);
         StructUtils.write(desc, bufferDesc);
         bufferDesc.flip();
         D3D11BufferImpl bufferImpl = (D3D11BufferImpl) buffer;

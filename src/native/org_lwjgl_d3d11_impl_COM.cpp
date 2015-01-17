@@ -61,7 +61,6 @@ extern "C" {
         GUID* guidPtr = (GUID*)(intptr_t)guidOutPtr;
         *guidPtr = __uuidof(ID3D11DeviceContext1);
     }
-
 #ifdef __cplusplus
 }
 #endif

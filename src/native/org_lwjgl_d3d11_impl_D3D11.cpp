@@ -29,7 +29,6 @@ extern "C" {
         HRESULT res = D3D11CreateDevice(adapter, dt, software, Flags, pFeatureLevels, FeatureLevels, SDKVersion, ppDevice, pFeatureLevel, ppImmediateContext);
         return (jlong) res;
     }
-
 #ifdef __cplusplus
 }
 #endif
