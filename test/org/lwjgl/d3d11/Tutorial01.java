@@ -70,10 +70,8 @@ public class Tutorial01 {
 
         D3D_DRIVER_TYPE[] driverTypes = { D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_REFERENCE };
 
-        D3D_FEATURE_LEVEL[] featureLevels = { D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_0,
-                D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_0 };
-
-        D3D_FEATURE_LEVEL[] featureLevels1 = { D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_1,
+        D3D_FEATURE_LEVEL[] featureLevels = { D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_1,
+                D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_1,
                 D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_0 };
 
         DXGI_SWAP_CHAIN_DESC swapChainDesc = new DXGI_SWAP_CHAIN_DESC();
@@ -91,13 +89,7 @@ public class Tutorial01 {
         swapChainDesc.SampleDesc.Quality = 0;
         swapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
-        Out<IDXGISwapChain> swapChainOut = new Out<>();
-        Out<ID3D11Device> deviceOut = new Out<>();
-        Out<D3D_FEATURE_LEVEL> featureLevelOut = new Out<>();
-        Out<ID3D11DeviceContext> immediateContextOut = new Out<>();
-
         long hr = 0;
-
         for (int driverTypeIndex = 0; driverTypeIndex < driverTypes.length; driverTypeIndex++) {
             g_driverType = driverTypes[driverTypeIndex];
             Out<ID3D11Device> device = new Out<ID3D11Device>();
@@ -105,13 +97,6 @@ public class Tutorial01 {
             Out<ID3D11DeviceContext> immediateContext = new Out<ID3D11DeviceContext>();
             hr = D3D11CreateDevice(null, g_driverType, 0L, createDeviceFlags, featureLevels, D3D11_SDK_VERSION, device,
                     featureLevel, immediateContext);
-
-            if (hr == E_INVALIDARG) {
-                // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-                hr = D3D11CreateDevice(null, g_driverType, 0L, createDeviceFlags, featureLevels1, D3D11_SDK_VERSION,
-                        device, featureLevel, immediateContext);
-            }
-
             if (SUCCEEDED(hr))
                 break;
         }
