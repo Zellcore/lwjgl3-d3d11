@@ -1,6 +1,7 @@
 package org.lwjgl.d3d11.impl;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.GUID;
@@ -19,18 +20,20 @@ public class DXGIObjectImpl extends UnknownImpl implements IDXGIObject {
     public static final native long nGetParent(long thisPtr, long guidPtr, long objectOutPtr);
 
     @Override
-    public <T> long GetParent(GUID riid, Class<? extends T> clazz, Out<T> objectOut) {
-        PointerBuffer pb = BufferPool.pointerBuffer(1);
-        long res = nGetParent(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddress(pb));
-        if (winerror.SUCCEEDED(res)) {
-            try {
+    public <T> long GetParent(Class<? extends T> clazz, Out<T> objectOut) {
+        try {
+            PointerBuffer pb = BufferPool.pointerBuffer(1);
+            Field uuidField = clazz.getDeclaredField("__uuid");
+            GUID uuid = (GUID) uuidField.get(null);
+            long res = nGetParent(ptr, MemoryUtil.memAddressSafe(uuid.bb), MemoryUtil.memAddress(pb));
+            if (winerror.SUCCEEDED(res)) {
                 Constructor<? extends T> ctor = clazz.getConstructor(long.class);
                 objectOut.value = (T) ctor.newInstance(pb.get(0));
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Not a reflectively instantiable clazz: " + clazz);
             }
+            return res;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Not a reflectively instantiable clazz: " + clazz);
         }
-        return res;
     }
 
 }

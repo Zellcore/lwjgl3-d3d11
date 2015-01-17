@@ -1,6 +1,7 @@
 package org.lwjgl.d3d11.impl;
 
 import org.lwjgl.PointerBuffer;
+import org.lwjgl.d3d11.GUID;
 import org.lwjgl.d3d11.IDXGIAdapter;
 import org.lwjgl.d3d11.IDXGIDevice;
 import org.lwjgl.d3d11.Out;
@@ -13,6 +14,8 @@ public class DXGIDeviceImpl extends DXGIObjectImpl implements IDXGIDevice {
     static {
         Sys.touch();
     }
+
+    public static final GUID __uuid = COM.__uuidof_IDXGIDevice();
 
     public DXGIDeviceImpl(long ptr) {
         super(ptr);

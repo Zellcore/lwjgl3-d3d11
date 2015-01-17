@@ -1,6 +1,7 @@
 package org.lwjgl.d3d11.impl;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.GUID;
@@ -41,18 +42,20 @@ public class UnknownImpl extends NativeObjectImpl implements IUnknown {
     }
 
     @Override
-    public <T> long QueryInterface(GUID riid, Class<? extends T> clazz, Out<T> objectOut) {
-        PointerBuffer pb = BufferPool.pointerBuffer(1);
-        long res = nQueryInterface(ptr, MemoryUtil.memAddressSafe(riid.bb), MemoryUtil.memAddress(pb));
-        if (winerror.SUCCEEDED(res)) {
-            try {
+    public <T> long QueryInterface(Class<? extends T> clazz, Out<T> objectOut) {
+        try {
+            PointerBuffer pb = BufferPool.pointerBuffer(1);
+            Field uuidField = clazz.getDeclaredField("__uuid");
+            GUID uuid = (GUID) uuidField.get(null);
+            long res = nQueryInterface(ptr, MemoryUtil.memAddressSafe(uuid.bb), MemoryUtil.memAddress(pb));
+            if (winerror.SUCCEEDED(res)) {
                 Constructor<? extends T> ctor = clazz.getConstructor(long.class);
                 objectOut.value = (T) ctor.newInstance(pb.get(0));
-            } catch (Exception e) {
-                throw new IllegalArgumentException("Not a reflectively instantiable clazz: " + clazz);
             }
+            return res;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Not a reflectively instantiable clazz: " + clazz);
         }
-        return res;
     }
 
 }

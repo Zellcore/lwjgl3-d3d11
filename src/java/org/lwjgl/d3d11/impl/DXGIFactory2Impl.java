@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC1;
 import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_FULLSCREEN_DESC;
+import org.lwjgl.d3d11.GUID;
 import org.lwjgl.d3d11.ID3D11Device;
 import org.lwjgl.d3d11.IDXGIFactory2;
 import org.lwjgl.d3d11.IDXGIOutput;
@@ -20,6 +21,8 @@ public class DXGIFactory2Impl extends DXGIFactory1Impl implements IDXGIFactory2 
     static {
         Sys.touch();
     }
+
+    public static final GUID __uuid = COM.__uuidof_IDXGIFactory2();
 
     public DXGIFactory2Impl(long ptr) {
         super(ptr);

@@ -169,7 +169,7 @@ public class Tutorial02 {
         {
             IDXGIDevice dxgiDevice = null;
             Out<IDXGIDevice> dxgiDeviceOut = new Out<IDXGIDevice>();
-            hr = g_pd3dDevice.QueryInterface(IDXGIDevice.__uuid, DXGIDeviceImpl.class, dxgiDeviceOut);
+            hr = g_pd3dDevice.QueryInterface(DXGIDeviceImpl.class, dxgiDeviceOut);
             dxgiDevice = dxgiDeviceOut.value;
             if (SUCCEEDED(hr)) {
                 IDXGIAdapter adapter = null;
@@ -178,7 +178,7 @@ public class Tutorial02 {
                 adapter = adapterOut.value;
                 if (SUCCEEDED(hr)) {
                     Out<IDXGIFactory1> dxgiFactoryOut = new Out<IDXGIFactory1>();
-                    hr = adapter.GetParent(IDXGIFactory1.__uuid, DXGIFactory1Impl.class, dxgiFactoryOut);
+                    hr = adapter.GetParent(DXGIFactory1Impl.class, dxgiFactoryOut);
                     dxgiFactory = dxgiFactoryOut.value;
                     adapter.Release();
                 }
@@ -191,17 +191,16 @@ public class Tutorial02 {
         // Create swap chain
         IDXGIFactory2 dxgiFactory2 = null;
         Out<IDXGIFactory2> dxgiFactory2Out = new Out<IDXGIFactory2>();
-        hr = dxgiFactory.QueryInterface(IDXGIFactory2.__uuid, DXGIFactory2Impl.class, dxgiFactory2Out);
+        hr = dxgiFactory.QueryInterface(DXGIFactory2Impl.class, dxgiFactory2Out);
         dxgiFactory2 = dxgiFactory2Out.value;
         if (dxgiFactory2 != null) {
             // DirectX 11.1 or later
             Out<ID3D11Device1> pd3dDevice1Out = new Out<ID3D11Device1>();
-            hr = g_pd3dDevice.QueryInterface(ID3D11Device1.__uuid, D3D11Device1Impl.class, pd3dDevice1Out);
+            hr = g_pd3dDevice.QueryInterface(D3D11Device1Impl.class, pd3dDevice1Out);
             g_pd3dDevice1 = pd3dDevice1Out.value;
             if (SUCCEEDED(hr)) {
                 Out<ID3D11DeviceContext1> pImmediateContext1Out = new Out<ID3D11DeviceContext1>();
-                g_pImmediateContext.QueryInterface(ID3D11DeviceContext1.__uuid, D3D11DeviceContext1Impl.class,
-                        pImmediateContext1Out);
+                g_pImmediateContext.QueryInterface(D3D11DeviceContext1Impl.class, pImmediateContext1Out);
                 g_pImmediateContext1 = pImmediateContext1Out.value;
             }
 
@@ -219,7 +218,7 @@ public class Tutorial02 {
             g_pSwapChain1 = swapChain1Out.value;
             if (SUCCEEDED(hr)) {
                 Out<IDXGISwapChain> swapChainOut = new Out<IDXGISwapChain>();
-                hr = g_pSwapChain1.QueryInterface(IDXGISwapChain.__uuid, DXGISwapChainImpl.class, swapChainOut);
+                hr = g_pSwapChain1.QueryInterface(DXGISwapChainImpl.class, swapChainOut);
                 g_pSwapChain = swapChainOut.value;
             }
             dxgiFactory2.Release();
@@ -237,7 +236,7 @@ public class Tutorial02 {
         // Create a render target view
         ID3D11Texture2D pBackBuffer = null;
         Out<ID3D11Texture2D> pBackBufferOut = new Out<ID3D11Texture2D>();
-        hr = g_pSwapChain.GetBuffer(0, ID3D11Texture2D.__uuid, D3D11Texture2DImpl.class, pBackBufferOut);
+        hr = g_pSwapChain.GetBuffer(0, D3D11Texture2DImpl.class, pBackBufferOut);
         pBackBuffer = pBackBufferOut.value;
         if (FAILED(hr))
             return hr;
