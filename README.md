@@ -3,7 +3,6 @@ lwjgl3-d3d11
 Direct3D 11 binding for LWJGL 3.
 
 This repository will contain a Direct3D 11 binding for LWJGL 3.
-It is currently in a very early stage and not functioning! I frankly just began with it right now. :)
 
 Mapping Direct3D 11 classes
 ----
@@ -14,3 +13,6 @@ Naming conventions
 ----
 All structs, classes and enums in the D3D11 C++ API will keep their names in their Java pendants. Also I want to keep the method names and the names like they are in the original C++ API with CamelCase. That will also allow people to easily move from C++ to Java/LWJGL3 (and vice versa).
 
+Status
+----
+The first demo (Tutorial01) of the [Direct3D Tutorial Win32 Sample](https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef) is successfully [ported](https://github.com/httpdigest/lwjgl3-d3d11/blob/master/test/org/lwjgl/d3d11/Tutorial01.java) to LWJGL 3 with Direct3D 11.
