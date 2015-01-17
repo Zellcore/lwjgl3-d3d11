@@ -15,4 +15,4 @@ All structs, classes and enums in the D3D11 C++ API will keep their names in the
 
 Status
 ----
-The first demo (Tutorial01) of the [Direct3D Tutorial Win32 Sample](https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef) is successfully [ported](https://github.com/httpdigest/lwjgl3-d3d11/blob/master/test/org/lwjgl/d3d11/Tutorial01.java) to LWJGL 3 with Direct3D 11.
+The first demo (Tutorial01) of the [Direct3D Tutorial Win32 Sample](https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef) is successfully [ported](https://github.com/httpdigest/lwjgl3-d3d11/blob/master/test/org/lwjgl/d3d11/tutorial01/Tutorial01.java) to LWJGL 3 with Direct3D 11.
