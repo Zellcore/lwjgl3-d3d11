@@ -2,10 +2,12 @@ package org.lwjgl.d3d11.impl;
 
 import java.nio.ByteBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_BUFFER_DESC;
 import org.lwjgl.d3d11.D3D11_INPUT_ELEMENT_DESC;
 import org.lwjgl.d3d11.D3D11_RENDER_TARGET_VIEW_DESC;
+import org.lwjgl.d3d11.D3D11_SUBRESOURCE_DATA;
 import org.lwjgl.d3d11.ID3D11Buffer;
 import org.lwjgl.d3d11.ID3D11ClassLinkage;
 import org.lwjgl.d3d11.ID3D11Device;
@@ -30,7 +32,8 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
         super(ptr);
     }
 
-    public static final native long nCreateBuffer(long thisPtr, long bufferDescPtr, long bufferAddr);
+    public static final native long nCreateBuffer(long thisPtr, long bufferDescPtr, long initialDataPtr,
+            long bufferOutPtr);
 
     public static final native long nCreateRenderTargetView(long thisPtr, long backBufferPtr, long descPtr,
             long renderTargetViewOutPtr);
@@ -44,13 +47,24 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
     public static final native long nCreatePixelShader(long thisPtr, long shaderBytecodePtr, int bytecodeLength,
             long classLinkagePtr, long pixelShaderOutPtr);
 
-    public long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer) {
-        ByteBuffer bufferDesc = BufferPool.byteBuffer(D3D11_BUFFER_DESC.SIZEOF);
+    public long CreateBuffer(D3D11_BUFFER_DESC desc, D3D11_SUBRESOURCE_DATA initialData, Out<ID3D11Buffer> bufferOut) {
+        ByteBuffer bufferDesc = BufferUtils.createByteBuffer(D3D11_BUFFER_DESC.SIZEOF);
         StructUtils.write(desc, bufferDesc);
         bufferDesc.flip();
-        D3D11BufferImpl bufferImpl = (D3D11BufferImpl) buffer;
-        long bufferAddr = bufferImpl.ptr;
-        return nCreateBuffer(ptr, MemoryUtil.memAddressSafe(bufferDesc), bufferAddr);
+        ByteBuffer bufferInitialData = null;
+        if (initialData != null) {
+            bufferInitialData = BufferUtils.createByteBuffer(D3D11_SUBRESOURCE_DATA.SIZEOF);
+            StructUtils.write(initialData, bufferInitialData);
+            bufferInitialData.flip();
+        }
+        PointerBuffer bufferOutPb = BufferPool.pointerBuffer(1);
+        long ret = nCreateBuffer(ptr, MemoryUtil.memAddressSafe(bufferDesc),
+                MemoryUtil.memAddressSafe(bufferInitialData), MemoryUtil.memAddress(bufferOutPb));
+        if (winerror.SUCCEEDED(ret)) {
+            ID3D11Buffer buf = new D3D11BufferImpl(bufferOutPb.get(0));
+            bufferOut.value = buf;
+        }
+        return ret;
     }
 
     @Override

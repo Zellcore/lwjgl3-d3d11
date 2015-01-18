@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 public interface ID3D11Device extends IUnknown {
 
-    long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer);
+    long CreateBuffer(D3D11_BUFFER_DESC desc, D3D11_SUBRESOURCE_DATA initialData, Out<ID3D11Buffer> buffer);
 
     long CreateRenderTargetView(ID3D11Texture2D pBackBuffer, D3D11_RENDER_TARGET_VIEW_DESC desc,
             Out<ID3D11RenderTargetView> renderTargetViewOut);

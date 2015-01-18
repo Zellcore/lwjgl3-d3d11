@@ -4,9 +4,11 @@ import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
 import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
 import static org.lwjgl.d3d11.impl.D3D11.*;
 import static org.lwjgl.d3d11.DXGI_FORMAT.*;
+import static org.lwjgl.d3d11.D3D11_USAGE.*;
 import static org.lwjgl.d3d11.DXGI.*;
 import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
 import static org.lwjgl.d3d11.D3D11_INPUT_CLASSIFICATION.*;
+import static org.lwjgl.d3d11.D3D11_BIND_FLAG.*;
 import static org.lwjgl.system.windows.WinUser.*;
 import static org.lwjgl.d3d11.winerror.*;
 import static org.lwjgl.d3d11.impl.d3dcompiler.*;
@@ -15,8 +17,12 @@ import static org.lwjgl.system.windows.WinError.*;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.nio.FloatBuffer;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.d3d11.D3D11_BUFFER_DESC;
 import org.lwjgl.d3d11.D3D11_INPUT_ELEMENT_DESC;
+import org.lwjgl.d3d11.D3D11_SUBRESOURCE_DATA;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.D3D_DRIVER_TYPE;
 import org.lwjgl.d3d11.D3D_FEATURE_LEVEL;
@@ -317,6 +323,25 @@ public class Tutorial02 {
         hr = g_pd3dDevice.CreatePixelShader(pPSBlob.GetBufferPointer(), null, pPixelShaderOut);
         g_pPixelShader = pPixelShaderOut.value;
         pPSBlob.Release();
+        if (FAILED(hr))
+            return hr;
+
+        // Create vertex buffer
+        ByteBuffer vertices = BufferUtils.createByteBuffer(4 * 3 * 3);
+        FloatBuffer fb = vertices.asFloatBuffer();
+        fb.put(0.0f).put(0.5f).put(0.5f);
+        fb.put(0.5f).put(-0.5f).put(0.5f);
+        fb.put(-0.5f).put(-0.5f).put(0.5f);
+        D3D11_BUFFER_DESC bd = new D3D11_BUFFER_DESC();
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.ByteWidth = vertices.remaining();
+        bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+        bd.CPUAccessFlags = 0;
+        D3D11_SUBRESOURCE_DATA InitData = new D3D11_SUBRESOURCE_DATA();
+        InitData.pSysMem = vertices;
+        Out<ID3D11Buffer> pVertexBufferOut = new Out<ID3D11Buffer>();
+        hr = g_pd3dDevice.CreateBuffer(bd, InitData, pVertexBufferOut);
+        g_pVertexBuffer = pVertexBufferOut.value;
         if (FAILED(hr))
             return hr;
 

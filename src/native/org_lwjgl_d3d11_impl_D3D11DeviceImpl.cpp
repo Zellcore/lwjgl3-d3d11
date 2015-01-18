@@ -8,11 +8,15 @@
 /*
  * Class:     org_lwjgl_d3d11_impl_D3D11DeviceImpl
  * Method:    nCreateBuffer
- * Signature: (JJJ)J
+ * Signature: (JJJJ)J
  */
 extern "C" JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateBuffer
-(JNIEnv *, jclass, jlong, jlong, jlong) {
-    return -1L;
+(JNIEnv * env, jclass clazz, jlong thisPtr, jlong bufferdescPtr, jlong initialDataPtr, jlong bufferOutPtr) {
+    ID3D11Device* device = (ID3D11Device*)(intptr_t)thisPtr;
+    const D3D11_BUFFER_DESC* desc = (const D3D11_BUFFER_DESC*)(intptr_t)bufferdescPtr;
+    const D3D11_SUBRESOURCE_DATA* initialData = (const D3D11_SUBRESOURCE_DATA*)(intptr_t)initialDataPtr;
+    ID3D11Buffer** bufferOut = (ID3D11Buffer**)(intptr_t)bufferOutPtr;
+    return (jlong)device->CreateBuffer(desc, initialData, bufferOut);
 }
 
 /*

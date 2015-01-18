@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.d3d11.Struct;
 import org.lwjgl.d3d11.annotation.Pointer;
+import org.lwjgl.system.MemoryUtil;
 
 public class StructUtils {
 
@@ -90,8 +91,18 @@ public class StructUtils {
                     /* Delegate to that struct */
                     newOff = write(str, bb, newOff);
                 }
-            } else if (CharSequence.class.isAssignableFrom(clazz)) {
-                
+            } else if (ByteBuffer.class.isAssignableFrom(clazz)) {
+                ByteBuffer buffer = (ByteBuffer) field.get(struct);
+                long addr = MemoryUtil.memAddressSafe(buffer);
+                if (org.lwjgl.Pointer.POINTER_SIZE == 4) {
+                    newOff += pad(bb, off, 4);
+                    bb.putInt((int) addr);
+                    newOff += 4;
+                } else {
+                    newOff += pad(bb, off, 8);
+                    bb.putLong(addr);
+                    newOff += 8;
+                }
             } else {
                 throw new IllegalStateException("Cannot write: " + clazz);
             }
