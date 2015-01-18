@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.D3D_DRIVER_TYPE;
 import org.lwjgl.d3d11.D3D_FEATURE_LEVEL;
+import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC;
 import org.lwjgl.d3d11.DXGI_SWAP_CHAIN_DESC1;
 import org.lwjgl.d3d11.DirectXColors;
 import org.lwjgl.d3d11.ID3D11Device;
@@ -177,7 +178,23 @@ public class Tutorial01 {
             }
             dxgiFactory2.Release();
         } else {
-            throw new UnsupportedOperationException("NYI");
+            // DirectX 11.0 systems
+            DXGI_SWAP_CHAIN_DESC sd = new DXGI_SWAP_CHAIN_DESC();
+            sd.BufferCount = 1;
+            sd.BufferDesc.Width = window.getClientWidth();
+            sd.BufferDesc.Height = window.getClientHeight();
+            sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+            sd.BufferDesc.RefreshRate.Numerator = 60;
+            sd.BufferDesc.RefreshRate.Denominator = 1;
+            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+            sd.OutputWindow = window.getHwnd();
+            sd.SampleDesc.Count = 1;
+            sd.SampleDesc.Quality = 0;
+            sd.Windowed = true;
+
+            Out<IDXGISwapChain> swapChainOut = new Out<IDXGISwapChain>();
+            hr = dxgiFactory.CreateSwapChain(g_pd3dDevice, sd, swapChainOut);
+            g_pSwapChain = swapChainOut.value;
         }
 
         // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut

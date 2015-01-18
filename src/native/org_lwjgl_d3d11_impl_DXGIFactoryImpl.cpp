@@ -20,6 +20,20 @@ extern "C" {
         return (jlong) factory->MakeWindowAssociation(hWnd, Flags);
     }
 
+    /*
+    * Class:     org_lwjgl_d3d11_impl_DXGIFactoryImpl
+    * Method:    nCreateSwapChain
+    * Signature: (JJJJ)J
+    */
+    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_DXGIFactoryImpl_nCreateSwapChain
+        (JNIEnv * env, jclass clazz, jlong thisPtr, jlong devicePtr, jlong swapChainDescPtr, jlong swapChainOutPtr) {
+        IDXGIFactory* factory = (IDXGIFactory*)(intptr_t)thisPtr;
+        IUnknown* device = (IUnknown*)(intptr_t)devicePtr;
+        DXGI_SWAP_CHAIN_DESC* swapChainDesc = (DXGI_SWAP_CHAIN_DESC*)(intptr_t)swapChainDescPtr;
+        IDXGISwapChain** swapChain = (IDXGISwapChain**)(intptr_t)swapChainOutPtr;
+        return (jlong)factory->CreateSwapChain(device, swapChainDesc, swapChain);
+    }
+
 #ifdef __cplusplus
 }
 #endif

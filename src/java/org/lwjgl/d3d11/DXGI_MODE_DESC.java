@@ -4,7 +4,7 @@ import static org.lwjgl.d3d11.DXGI_FORMAT.*;
 import static org.lwjgl.d3d11.DXGI_MODE_SCANLINE_ORDER.*;
 import static org.lwjgl.d3d11.DXGI_MODE_SCALING.*;
 
-public class DXGI_MODE_DESC {
+public class DXGI_MODE_DESC implements Struct {
 
     public static final int SIZEOF = 28;
 
