@@ -99,6 +99,7 @@ jlong shaderBytecodePtr, jint bytecodeLength, jlong inputLayoutOutPtr) {
     }
     free(chars);
     free(jstrings);
+    free(descs);
 
     return (jlong)res;
 }
