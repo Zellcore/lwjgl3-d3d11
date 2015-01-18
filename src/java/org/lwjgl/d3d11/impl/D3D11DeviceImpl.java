@@ -2,7 +2,6 @@ package org.lwjgl.d3d11.impl;
 
 import java.nio.ByteBuffer;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_BUFFER_DESC;
 import org.lwjgl.d3d11.D3D11_RENDER_TARGET_VIEW_DESC;
@@ -12,6 +11,7 @@ import org.lwjgl.d3d11.ID3D11RenderTargetView;
 import org.lwjgl.d3d11.ID3D11Texture2D;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
+import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.d3d11.util.StructUtils;
 import org.lwjgl.system.MemoryUtil;
 
@@ -31,7 +31,7 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
             long renderTargetViewOutPtr);
 
     public long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer) {
-        ByteBuffer bufferDesc = BufferUtils.createByteBuffer(D3D11_BUFFER_DESC.SIZEOF);
+        ByteBuffer bufferDesc = BufferPool.byteBuffer(D3D11_BUFFER_DESC.SIZEOF);
         StructUtils.write(desc, bufferDesc);
         bufferDesc.flip();
         D3D11BufferImpl bufferImpl = (D3D11BufferImpl) buffer;
@@ -46,11 +46,11 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
         long backBufferPtr = backBufferImpl != null ? backBufferImpl.ptr : 0L;
         long descPtr = 0L;
         if (pDesc != null) {
-            ByteBuffer descBuffer = BufferUtils.createByteBuffer(D3D11_BUFFER_DESC.SIZEOF);
+            ByteBuffer descBuffer = BufferPool.byteBuffer(D3D11_BUFFER_DESC.SIZEOF);
             StructUtils.write(pDesc, descBuffer);
             descBuffer.rewind();
         }
-        PointerBuffer pb = BufferUtils.createPointerBuffer(1);
+        PointerBuffer pb = BufferPool.pointerBuffer(1);
         long ret = nCreateRenderTargetView(ptr, backBufferPtr, descPtr, MemoryUtil.memAddress(pb));
         if (winerror.SUCCEEDED(ret)) {
             ID3D11RenderTargetView rtv = new D3D11RenderTargetViewImpl(pb.get(0));

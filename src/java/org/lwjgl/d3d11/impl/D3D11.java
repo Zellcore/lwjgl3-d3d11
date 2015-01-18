@@ -13,6 +13,7 @@ import org.lwjgl.d3d11.ID3D11Device;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
 import org.lwjgl.d3d11.IDXGIAdapter;
 import org.lwjgl.d3d11.Out;
+import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.system.MemoryUtil;
 
 public class D3D11 {
@@ -32,12 +33,12 @@ public class D3D11 {
             Out<D3D_FEATURE_LEVEL> pFeatureLevel, Out<ID3D11DeviceContext> ppImmediateContext) {
         DXGIAdapterImpl pAdapterImpl = (DXGIAdapterImpl) pAdapter;
         long adapterPtr = pAdapterImpl != null ? pAdapterImpl.ptr : 0L;
-        ByteBuffer featureLevelsBuffer = BufferUtils.createByteBuffer(4 * pFeatureLevels.length);
+        ByteBuffer featureLevelsBuffer = BufferPool.byteBuffer(4 * pFeatureLevels.length);
         for (D3D_FEATURE_LEVEL fl : pFeatureLevels) {
             featureLevelsBuffer.putInt(fl.value);
         }
         featureLevelsBuffer.rewind();
-        PointerBuffer ppDeviceBuffer = BufferUtils.createPointerBuffer(1);
+        PointerBuffer ppDeviceBuffer = BufferPool.pointerBuffer(1);
         IntBuffer selectedFeatureLevelBuffer = BufferUtils.createIntBuffer(1);
         PointerBuffer ppImmediateContextBuffer = BufferUtils.createPointerBuffer(1);
         long res = nD3D11CreateDevice(adapterPtr, DriverType.ordinal(), hmodule_Software, Flags,

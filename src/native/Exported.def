@@ -1,8 +1,5 @@
 LIBRARY d3d11binding
 EXPORTS
-    Java_org_lwjgl_d3d11_impl_D3D11_nD3D11CreateDevice
-    Java_org_lwjgl_d3d11_impl_UnknownImpl_nRelease
-    Java_org_lwjgl_d3d11_impl_UnknownImpl_nQueryInterface
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIDevice
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIFactory1
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIFactory2
@@ -10,14 +7,29 @@ EXPORTS
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1ID3D11DeviceContext1
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGISwapChain
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1ID3D11Texture2D
-    Java_org_lwjgl_d3d11_impl_DXGIDeviceImpl_nGetAdapter
-    Java_org_lwjgl_d3d11_impl_DXGIObjectImpl_nGetParent
-    Java_org_lwjgl_d3d11_impl_DXGIFactory2Impl_nCreateSwapChainForHwnd
-    Java_org_lwjgl_d3d11_impl_DXGIFactoryImpl_nMakeWindowAssociation
-    Java_org_lwjgl_d3d11_impl_DXGISwapChainImpl_nPresent
-    Java_org_lwjgl_d3d11_impl_DXGISwapChainImpl_nGetBuffer
-    Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateBuffer
-    Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateRenderTargetView
+
+    Java_org_lwjgl_d3d11_impl_D3D11_nD3D11CreateDevice
+
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nClearRenderTargetView
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nOMSetRenderTargets
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nRSSetViewports
+
+    Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateBuffer
+    Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateRenderTargetView
+
+    Java_org_lwjgl_d3d11_impl_d3dcompiler_nD3DCompileFromFile
+
+    Java_org_lwjgl_d3d11_impl_DXGIDeviceImpl_nGetAdapter
+
+    Java_org_lwjgl_d3d11_impl_DXGIFactory2Impl_nCreateSwapChainForHwnd
+
+    Java_org_lwjgl_d3d11_impl_DXGIFactoryImpl_nMakeWindowAssociation
+    Java_org_lwjgl_d3d11_impl_DXGIFactoryImpl_nCreateSwapChain
+
+    Java_org_lwjgl_d3d11_impl_DXGIObjectImpl_nGetParent
+
+    Java_org_lwjgl_d3d11_impl_DXGISwapChainImpl_nPresent
+    Java_org_lwjgl_d3d11_impl_DXGISwapChainImpl_nGetBuffer
+
+    Java_org_lwjgl_d3d11_impl_UnknownImpl_nRelease
+    Java_org_lwjgl_d3d11_impl_UnknownImpl_nQueryInterface

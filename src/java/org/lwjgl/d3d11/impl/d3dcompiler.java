@@ -1,7 +1,15 @@
 package org.lwjgl.d3d11.impl;
 
+import java.nio.ByteBuffer;
+
+import org.lwjgl.BufferUtils;
+import org.lwjgl.ID3DInclude;
+import org.lwjgl.PointerBuffer;
+import org.lwjgl.d3d11.D3D_SHADER_MACRO;
 import org.lwjgl.d3d11.ID3DBlob;
 import org.lwjgl.d3d11.Out;
+import org.lwjgl.d3d11.winerror;
+import org.lwjgl.system.MemoryUtil;
 
 public class d3dcompiler {
 
@@ -32,9 +40,48 @@ public class d3dcompiler {
     public static final int D3DCOMPILE_WARNINGS_ARE_ERRORS = (1 << 18);
     public static final int D3DCOMPILE_RESOURCES_MAY_ALIAS = (1 << 19);
 
-    public static int D3DCompileFromFile(String fileName, Object object, Object object2, String entryPoint,
-            String szShaderModel, int dwShaderFlags, int i, Out<ID3DBlob> blobOut, Out<ID3DBlob> pErrorBlob) {
-        return 0;
+    public static final native int nD3DCompileFromFile(long fileNamePtr, long nullTerminatedDefinesPtr,
+            long includePtr, long entryPointPtr, long targetPtr, int flags1, int flags2, long codeOutPtr,
+            long errorMsgsOutPtr);
+
+    public static int D3DCompileFromFile(CharSequence fileName, D3D_SHADER_MACRO[] defines, ID3DInclude include,
+            CharSequence entryPoint, CharSequence target, int flags1, int flags2, Out<ID3DBlob> codeOut,
+            Out<ID3DBlob> errorMsgsOut) {
+        ByteBuffer fileNameBuffer = MemoryUtil.memEncodeUTF8(fileName, true);
+        ByteBuffer entryPointBuffer = MemoryUtil.memEncodeUTF8(entryPoint, true);
+        ByteBuffer targetBuffer = MemoryUtil.memEncodeUTF8(target, true);
+        PointerBuffer definesPb = null;
+        if (defines != null) {
+            definesPb = BufferUtils.createPointerBuffer(defines.length * 2 + 2);
+            for (int i = 0; i < defines.length; i++) {
+                ByteBuffer defineNameBuffer = MemoryUtil.memEncodeUTF8(defines[i].Name, true);
+                ByteBuffer defineDefinitionBuffer = MemoryUtil.memEncodeUTF8(defines[i].Definition, true);
+                definesPb.put(MemoryUtil.memAddress(defineNameBuffer));
+                definesPb.put(MemoryUtil.memAddress(defineDefinitionBuffer));
+            }
+            /* Terminating (NULL, NULL) element!!! */
+            definesPb.put(0L).put(0L);
+        }
+        D3DIncludeImpl includeImpl = (D3DIncludeImpl) include;
+        long includePtr = includeImpl != null ? includeImpl.ptr : 0L;
+        PointerBuffer codeOutPb = BufferUtils.createPointerBuffer(1);
+        PointerBuffer errorMsgsOutPb = errorMsgsOut != null ? BufferUtils.createPointerBuffer(1) : null;
+        int res = nD3DCompileFromFile(MemoryUtil.memAddress(fileNameBuffer), MemoryUtil.memAddressSafe(definesPb),
+                includePtr, MemoryUtil.memAddress(entryPointBuffer), MemoryUtil.memAddress(targetBuffer), flags1,
+                flags2, MemoryUtil.memAddress(codeOutPb), MemoryUtil.memAddressSafe(errorMsgsOutPb));
+        if (winerror.SUCCEEDED(res)) {
+            D3DBlobImpl codeOutBlob = new D3DBlobImpl(codeOutPb.get(0));
+            codeOut.value = codeOutBlob;
+            if (errorMsgsOut != null) {
+                D3DBlobImpl errorMsgsOutBlob = null;
+                long addr = errorMsgsOutPb.get(0);
+                if (addr != 0L) {
+                    errorMsgsOutBlob = new D3DBlobImpl(addr);
+                }
+                errorMsgsOut.value = errorMsgsOutBlob;
+            }
+        }
+        return res;
     }
 
 }

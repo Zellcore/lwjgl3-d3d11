@@ -3,12 +3,12 @@ package org.lwjgl.d3d11.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.GUID;
 import org.lwjgl.d3d11.IDXGISwapChain;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
+import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.system.MemoryUtil;
 
 public class DXGISwapChainImpl extends DXGIDeviceSubObjectImpl implements IDXGISwapChain {
@@ -31,7 +31,7 @@ public class DXGISwapChainImpl extends DXGIDeviceSubObjectImpl implements IDXGIS
     @Override
     public <T> long GetBuffer(int buffer, Class<? extends T> clazz, Out<T> bufferOut) {
         try {
-            PointerBuffer pb = BufferUtils.createPointerBuffer(1);
+            PointerBuffer pb = BufferPool.pointerBuffer(1);
             Field uuidField = clazz.getDeclaredField("__uuid");
             GUID uuid = (GUID) uuidField.get(null);
             long res = nGetBuffer(ptr, buffer, MemoryUtil.memAddressSafe(uuid.bb), MemoryUtil.memAddressSafe(pb));
