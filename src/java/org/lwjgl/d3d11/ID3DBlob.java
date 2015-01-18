@@ -6,4 +6,6 @@ public interface ID3DBlob extends IUnknown {
 
     ByteBuffer GetBufferPointer();
 
+    int GetBufferSize();
+
 }

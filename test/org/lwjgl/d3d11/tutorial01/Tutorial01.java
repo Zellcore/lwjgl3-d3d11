@@ -85,6 +85,8 @@ public class Tutorial01 {
             Render();
         }
         window.destroy();
+
+        CleanupDevice();
     }
 
     private long InitWindow() {

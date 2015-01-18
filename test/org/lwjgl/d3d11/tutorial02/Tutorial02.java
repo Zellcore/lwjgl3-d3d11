@@ -10,6 +10,8 @@ import static org.lwjgl.system.windows.WinUser.*;
 import static org.lwjgl.d3d11.winerror.*;
 import static org.lwjgl.d3d11.impl.d3dcompiler.*;
 
+import static org.lwjgl.system.windows.WinError.*;
+
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -46,7 +48,6 @@ import org.lwjgl.d3d11.impl.DXGIFactory2Impl;
 import org.lwjgl.d3d11.impl.DXGISwapChainImpl;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
-import org.lwjgl.system.windows.WinError;
 
 /**
  * This is a port of the Tutorial02 from the <a
@@ -99,10 +100,12 @@ public class Tutorial02 {
             Render();
         }
         window.destroy();
+
+        CleanupDevice();
     }
 
     private int CompileShaderFromFile(File fileName, String entryPoint, String szShaderModel, Out<ID3DBlob> blobOut) {
-        int hr = WinError.S_OK;
+        int hr = S_OK;
 
         int dwShaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
         if (_DEBUG) {
@@ -129,7 +132,7 @@ public class Tutorial02 {
         if (pErrorBlob.value != null)
             pErrorBlob.value.Release();
 
-        return WinError.S_OK;
+        return S_OK;
     }
 
     private long InitWindow() {
@@ -269,6 +272,15 @@ public class Tutorial02 {
         if (FAILED(hr)) {
             System.err
                     .println("The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+            return hr;
+        }
+
+        // Create the vertex shader
+        Out<ID3D11VertexShader> pVertexShaderOut = new Out<ID3D11VertexShader>();
+        hr = g_pd3dDevice.CreateVertexShader(pVSBlob.GetBufferPointer(), null, pVertexShaderOut);
+        g_pVertexShader = pVertexShaderOut.value;
+        if (FAILED(hr)) {
+            pVSBlob.Release();
             return hr;
         }
 

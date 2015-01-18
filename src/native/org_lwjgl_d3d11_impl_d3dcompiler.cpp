@@ -14,11 +14,12 @@ extern "C" {
     /*
      * Class:     org_lwjgl_d3d11_impl_d3dcompiler
     * Method:    nD3DCompileFromFile
-    * Signature: (JJJJJIIJJ)I
+    * Signature: (JJJJJIIJJJJ)I
     */
     JNIEXPORT jint JNICALL Java_org_lwjgl_d3d11_impl_d3dcompiler_nD3DCompileFromFile
         (JNIEnv * env, jclass clazz, jlong fileNamePtr, jlong definesPtr, jlong includePtr, jlong entryPointPtr, 
-        jlong targetPtr, jint flags1, jint flags2, jlong codeOutPtr, jlong errorMsgsOutPtr) {
+        jlong targetPtr, jint flags1, jint flags2,
+        jlong codeOutPtr, jlong errorMsgsOutPtr) {
         const char* fileNameCStr = (const char*)(intptr_t)fileNamePtr;
         size_t fileNameSize = strlen(fileNameCStr) + 1;
         wchar_t* wstr = (wchar_t*) malloc(sizeof(wchar_t) * fileNameSize);
