@@ -47,6 +47,7 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
     public static final native long nCreatePixelShader(long thisPtr, long shaderBytecodePtr, int bytecodeLength,
             long classLinkagePtr, long pixelShaderOutPtr);
 
+    @Override
     public long CreateBuffer(D3D11_BUFFER_DESC desc, D3D11_SUBRESOURCE_DATA initialData, Out<ID3D11Buffer> bufferOut) {
         ByteBuffer bufferDesc = BufferUtils.createByteBuffer(D3D11_BUFFER_DESC.SIZEOF);
         StructUtils.write(desc, bufferDesc);

@@ -1,5 +1,7 @@
 LIBRARY d3d11binding
 EXPORTS
+    JNI_OnLoad
+
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIDevice
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIFactory1
     Java_org_lwjgl_d3d11_impl_COM_n_1_1uuidof_1IDXGIFactory2
