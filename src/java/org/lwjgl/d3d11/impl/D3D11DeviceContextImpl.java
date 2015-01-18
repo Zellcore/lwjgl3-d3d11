@@ -29,6 +29,8 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
 
     public static final native void nRSSetViewports(long thisPtr, int numViewports, long viewportsPtr);
 
+    public static final native void nIASetInputLayout(long thisPtr, long inputLayoutPtr);
+
     @Override
     public void ClearRenderTargetView(ID3D11RenderTargetView view, float[] color) {
         ByteBuffer colorBuffer = BufferPool.byteBuffer(4 * 4);
@@ -65,8 +67,9 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     }
 
     @Override
-    public void IASetInputLayout(ID3D11InputLayout vertexLayout) {
-
+    public void IASetInputLayout(ID3D11InputLayout inputLayout) {
+        NativeObjectImpl inputLayoutImpl = (NativeObjectImpl) inputLayout;
+        nIASetInputLayout(ptr, inputLayoutImpl.ptr);
     }
 
 }

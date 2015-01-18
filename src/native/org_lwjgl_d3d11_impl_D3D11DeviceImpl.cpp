@@ -98,3 +98,20 @@ jlong shaderBytecodePtr, jint bytecodeLength, jlong inputLayoutOutPtr) {
 
     return (jlong)res;
 }
+
+/*
+* Class:     org_lwjgl_d3d11_impl_D3D11DeviceImpl
+* Method:    nCreatePixelShader
+* Signature: (JJIJJ)J
+*/
+extern "C" JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreatePixelShader
+(JNIEnv * env, jclass clazz, jlong thisPtr, jlong shaderBytecodePtr, jint bytecodeLength,
+jlong classLinkagePtr, jlong pixelShaderOutPtr) {
+    ID3D11Device* device = (ID3D11Device*)(intptr_t)thisPtr;
+    const void* shaderBytecode = (const void*)(intptr_t)shaderBytecodePtr;
+    SIZE_T length = (SIZE_T)bytecodeLength;
+    ID3D11ClassLinkage* linkage = (ID3D11ClassLinkage*)(intptr_t)classLinkagePtr;
+    ID3D11PixelShader** pixelShaderOut = (ID3D11PixelShader**)(intptr_t)pixelShaderOutPtr;
+    HRESULT res = device->CreatePixelShader(shaderBytecode, length, linkage, pixelShaderOut);
+    return (jlong)res;
+}

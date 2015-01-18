@@ -15,4 +15,7 @@ public interface ID3D11Device extends IUnknown {
     long CreateInputLayout(D3D11_INPUT_ELEMENT_DESC[] layout, ByteBuffer shaderBytecodeWithInputSignature,
             Out<ID3D11InputLayout> inputLayoutOut);
 
+    long CreatePixelShader(ByteBuffer shaderBytecode, ID3D11ClassLinkage classLinkage,
+            Out<ID3D11PixelShader> pixelShaderOut);
+
 }

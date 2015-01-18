@@ -300,6 +300,26 @@ public class Tutorial02 {
         // Set the input layout
         g_pImmediateContext.IASetInputLayout(g_pVertexLayout);
 
+        // Compile the pixel shader
+        ID3DBlob pPSBlob = null;
+        Out<ID3DBlob> pPSBlobOut = new Out<ID3DBlob>();
+        hr = CompileShaderFromFile(new File(Tutorial02.class.getResource("Tutorial02.fx").toURI()), "PS", "ps_4_0",
+                pPSBlobOut);
+        pPSBlob = pPSBlobOut.value;
+        if (FAILED(hr)) {
+            System.err
+                    .println("The FX file cannot be compiled.  Please run this executable from the directory that contains the FX file.");
+            return hr;
+        }
+
+        // Create the pixel shader
+        Out<ID3D11PixelShader> pPixelShaderOut = new Out<ID3D11PixelShader>();
+        hr = g_pd3dDevice.CreatePixelShader(pPSBlob.GetBufferPointer(), null, pPixelShaderOut);
+        g_pPixelShader = pPixelShaderOut.value;
+        pPSBlob.Release();
+        if (FAILED(hr))
+            return hr;
+
         return 0;
     }
 

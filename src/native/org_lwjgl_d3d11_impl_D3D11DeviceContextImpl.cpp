@@ -44,3 +44,15 @@ extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextIm
     D3D11_VIEWPORT* viewports = (D3D11_VIEWPORT*)(intptr_t)viewportsPtr;
     deviceContext->RSSetViewports(NumViewports, viewports);
 }
+
+/*
+* Class:     org_lwjgl_d3d11_impl_D3D11DeviceContextImpl
+* Method:    nIASetInputLayout
+* Signature: (JJ)V
+*/
+extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetInputLayout
+(JNIEnv * env, jclass clazz, jlong thisPtr, jlong inputLayoutPtr) {
+    ID3D11DeviceContext* deviceContext = (ID3D11DeviceContext*)(intptr_t)thisPtr;
+    ID3D11InputLayout* inputLayout = (ID3D11InputLayout*)(intptr_t)inputLayoutPtr;
+    deviceContext->IASetInputLayout(inputLayout);
+}

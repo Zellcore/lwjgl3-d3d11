@@ -10,6 +10,7 @@ import org.lwjgl.d3d11.ID3D11Buffer;
 import org.lwjgl.d3d11.ID3D11ClassLinkage;
 import org.lwjgl.d3d11.ID3D11Device;
 import org.lwjgl.d3d11.ID3D11InputLayout;
+import org.lwjgl.d3d11.ID3D11PixelShader;
 import org.lwjgl.d3d11.ID3D11RenderTargetView;
 import org.lwjgl.d3d11.ID3D11Texture2D;
 import org.lwjgl.d3d11.ID3D11VertexShader;
@@ -39,6 +40,9 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
 
     public static final native long nCreateInputLayout(long thisPtr, D3D11_INPUT_ELEMENT_DESC[] layout,
             long shaderBytecodeWithInputSignaturePtr, int bytecodeLength, long inputLayoutOutPtr);
+
+    public static final native long nCreatePixelShader(long thisPtr, long shaderBytecodePtr, int bytecodeLength,
+            long classLinkagePtr, long pixelShaderOutPtr);
 
     public long CreateBuffer(D3D11_BUFFER_DESC desc, Object NULL, ID3D11Buffer buffer) {
         ByteBuffer bufferDesc = BufferPool.byteBuffer(D3D11_BUFFER_DESC.SIZEOF);
@@ -98,6 +102,26 @@ public class D3D11DeviceImpl extends UnknownImpl implements ID3D11Device {
         if (winerror.SUCCEEDED(ret)) {
             D3D11InputLayoutImpl layoutImpl = new D3D11InputLayoutImpl(inputLayoutOutPb.get(0));
             inputLayoutOut.value = layoutImpl;
+        }
+        return ret;
+    }
+
+    @Override
+    public long CreatePixelShader(ByteBuffer shaderBytecode, ID3D11ClassLinkage classLinkage,
+            Out<ID3D11PixelShader> pixelShaderOut) {
+        long shaderBytecodePtr = MemoryUtil.memAddress(shaderBytecode);
+        int length = shaderBytecode.remaining();
+        NativeObjectImpl classLinkageImpl = (NativeObjectImpl) classLinkage;
+        long classLinkagePtr = 0L;
+        if (classLinkageImpl != null) {
+            classLinkagePtr = classLinkageImpl.ptr;
+        }
+        PointerBuffer pixelShaderOutPb = BufferPool.pointerBuffer(1);
+        long ret = nCreatePixelShader(ptr, shaderBytecodePtr, length, classLinkagePtr,
+                MemoryUtil.memAddress(pixelShaderOutPb));
+        if (winerror.SUCCEEDED(ret)) {
+            D3D11PixelShaderImpl psImpl = new D3D11PixelShaderImpl(pixelShaderOutPb.get(0));
+            pixelShaderOut.value = psImpl;
         }
         return ret;
     }

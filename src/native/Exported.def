@@ -13,11 +13,13 @@ EXPORTS
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nClearRenderTargetView
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nOMSetRenderTargets
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nRSSetViewports
+    Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetInputLayout
 
     Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateBuffer
     Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateRenderTargetView
     Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateVertexShader
     Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreateInputLayout
+    Java_org_lwjgl_d3d11_impl_D3D11DeviceImpl_nCreatePixelShader
 
     Java_org_lwjgl_d3d11_impl_D3DBlobImpl_nGetBufferPointer
     Java_org_lwjgl_d3d11_impl_D3DBlobImpl_nGetBufferSize
