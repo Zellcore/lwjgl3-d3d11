@@ -6,6 +6,7 @@ import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.ID3D11DepthStencilView;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
+import org.lwjgl.d3d11.ID3D11InputLayout;
 import org.lwjgl.d3d11.ID3D11RenderTargetView;
 import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.d3d11.util.StructUtils;
@@ -61,6 +62,11 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
         }
         vpBuffer.rewind();
         nRSSetViewports(ptr, viewports.length, MemoryUtil.memAddress(vpBuffer));
+    }
+
+    @Override
+    public void IASetInputLayout(ID3D11InputLayout vertexLayout) {
+
     }
 
 }

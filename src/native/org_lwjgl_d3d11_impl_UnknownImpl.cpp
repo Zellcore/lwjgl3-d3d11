@@ -3,33 +3,27 @@
 #pragma comment(lib, "d3d11.lib")
 
 #include <jni.h>
-        
-#ifdef __cplusplus
-extern "C" {
-#endif
-    /*
-    * Class:     org_lwjgl_d3d11_impl_UnknownImpl
-    * Method:    nRelease
-    * Signature: (J)V
-    */
-    JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nRelease
-        (JNIEnv * env, jclass clazz, jlong thisPtr) {
-        IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
-        obj->Release();
-    }
 
-    /*
-    * Class:     org_lwjgl_d3d11_impl_UnknownImpl
-    * Method:    nQueryInterface
-    * Signature: (JJ)J
-    */
-    JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nQueryInterface
-        (JNIEnv * env, jclass clazz, jlong thisPtr, jlong guidPtr, jlong objectOutPtr) {
-        IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
-        const IID* guid = (IID*)(intptr_t)guidPtr;
-        void** outPtr = (void**)(intptr_t)objectOutPtr;
-        return obj->QueryInterface(*guid, outPtr);
-    }
-#ifdef __cplusplus
+/*
+* Class:     org_lwjgl_d3d11_impl_UnknownImpl
+* Method:    nRelease
+* Signature: (J)V
+*/
+extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nRelease
+(JNIEnv * env, jclass clazz, jlong thisPtr) {
+    IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
+    obj->Release();
 }
-#endif
+
+/*
+* Class:     org_lwjgl_d3d11_impl_UnknownImpl
+* Method:    nQueryInterface
+* Signature: (JJ)J
+*/
+extern "C" JNIEXPORT jlong JNICALL Java_org_lwjgl_d3d11_impl_UnknownImpl_nQueryInterface
+(JNIEnv * env, jclass clazz, jlong thisPtr, jlong guidPtr, jlong objectOutPtr) {
+    IUnknown* obj = (IUnknown*)(intptr_t)thisPtr;
+    const IID* guid = (IID*)(intptr_t)guidPtr;
+    void** outPtr = (void**)(intptr_t)objectOutPtr;
+    return obj->QueryInterface(*guid, outPtr);
+}

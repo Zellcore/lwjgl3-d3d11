@@ -6,16 +6,17 @@ import static org.lwjgl.d3d11.impl.D3D11.*;
 import static org.lwjgl.d3d11.DXGI_FORMAT.*;
 import static org.lwjgl.d3d11.DXGI.*;
 import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
+import static org.lwjgl.d3d11.D3D11_INPUT_CLASSIFICATION.*;
 import static org.lwjgl.system.windows.WinUser.*;
 import static org.lwjgl.d3d11.winerror.*;
 import static org.lwjgl.d3d11.impl.d3dcompiler.*;
-
 import static org.lwjgl.system.windows.WinError.*;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 
+import org.lwjgl.d3d11.D3D11_INPUT_ELEMENT_DESC;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.D3D_DRIVER_TYPE;
 import org.lwjgl.d3d11.D3D_FEATURE_LEVEL;
@@ -283,6 +284,21 @@ public class Tutorial02 {
             pVSBlob.Release();
             return hr;
         }
+
+        // Define the input layout
+        D3D11_INPUT_ELEMENT_DESC layout[] = { new D3D11_INPUT_ELEMENT_DESC("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+                0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0), };
+
+        // Create the input layout
+        Out<ID3D11InputLayout> pVertexLayoutOut = new Out<ID3D11InputLayout>();
+        hr = g_pd3dDevice.CreateInputLayout(layout, pVSBlob.GetBufferPointer(), pVertexLayoutOut);
+        g_pVertexLayout = pVertexLayoutOut.value;
+        pVSBlob.Release();
+        if (FAILED(hr))
+            return hr;
+
+        // Set the input layout
+        g_pImmediateContext.IASetInputLayout(g_pVertexLayout);
 
         return 0;
     }

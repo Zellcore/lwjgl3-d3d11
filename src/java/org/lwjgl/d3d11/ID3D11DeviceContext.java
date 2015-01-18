@@ -8,4 +8,6 @@ public interface ID3D11DeviceContext extends ID3D11DeviceChild {
 
     void RSSetViewports(D3D11_VIEWPORT[] d3d11_VIEWPORTs);
 
+    void IASetInputLayout(ID3D11InputLayout vertexLayout);
+
 }

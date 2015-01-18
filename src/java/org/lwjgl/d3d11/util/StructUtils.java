@@ -90,6 +90,8 @@ public class StructUtils {
                     /* Delegate to that struct */
                     newOff = write(str, bb, newOff);
                 }
+            } else if (CharSequence.class.isAssignableFrom(clazz)) {
+                
             } else {
                 throw new IllegalStateException("Cannot write: " + clazz);
             }
