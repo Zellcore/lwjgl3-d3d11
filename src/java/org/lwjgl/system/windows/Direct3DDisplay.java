@@ -73,7 +73,7 @@ public class Direct3DDisplay {
 
 		/* Create window */
 		hwnd = CreateWindowEx(WS_EX_APPWINDOW, className, title,  
-                style, 0, 0, this.width, this.height,
+                style, CW_USEDEFAULT, CW_USEDEFAULT, this.width, this.height,
 				NULL, NULL, HINSTANCE, defaultWndProc.getPointer());
 		windowsCheckHandle(hwnd, "Failed to create window");
 
