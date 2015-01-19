@@ -1,4 +1,4 @@
-package org.lwjgl.d3d11.tutorial02;
+package org.lwjgl.d3d11.tutorial03;
 
 import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
 import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
@@ -66,7 +66,7 @@ import org.lwjgl.system.windows.MSG;
  * @author kai
  *
  */
-public class Tutorial02 {
+public class Tutorial03 {
 
     static final boolean _DEBUG = true;
 
@@ -145,7 +145,7 @@ public class Tutorial02 {
     }
 
     private long InitWindow() {
-        window = new Direct3DDisplay("Direct3D 11 Tutorial 2: Rendering a Triangle", 800, 600, WS_OVERLAPPED | WS_CAPTION
+        window = new Direct3DDisplay("Direct3D 11 Tutorial 3: Shaders", 800, 600, WS_OVERLAPPED | WS_CAPTION
                 | WS_SYSMENU | WS_MINIMIZEBOX);
         window.setVisible(true);
         return 0L;
@@ -291,7 +291,7 @@ public class Tutorial02 {
         // Compile the vertex shader
         ID3DBlob pVSBlob = null;
         Out<ID3DBlob> pVSBlobOut = new Out<ID3DBlob>();
-        hr = CompileShaderFromFile(new File(Tutorial02.class.getResource("Tutorial02.fx").toURI()), "VS", "vs_4_0",
+        hr = CompileShaderFromFile(new File(Tutorial03.class.getResource("Tutorial03.fx").toURI()), "VS", "vs_4_0",
                 pVSBlobOut);
         pVSBlob = pVSBlobOut.value;
         if (FAILED(hr)) {
@@ -327,7 +327,7 @@ public class Tutorial02 {
         // Compile the pixel shader
         ID3DBlob pPSBlob = null;
         Out<ID3DBlob> pPSBlobOut = new Out<ID3DBlob>();
-        hr = CompileShaderFromFile(new File(Tutorial02.class.getResource("Tutorial02.fx").toURI()), "PS", "ps_4_0",
+        hr = CompileShaderFromFile(new File(Tutorial03.class.getResource("Tutorial03.fx").toURI()), "PS", "ps_4_0",
                 pPSBlobOut);
         pPSBlob = pPSBlobOut.value;
         if (FAILED(hr)) {
@@ -393,7 +393,7 @@ public class Tutorial02 {
     }
 
     public static void main(String[] args) throws URISyntaxException {
-        new Tutorial02().winMain();
+        new Tutorial03().winMain();
     }
 
 }
