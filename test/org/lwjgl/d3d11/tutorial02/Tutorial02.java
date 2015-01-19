@@ -145,8 +145,8 @@ public class Tutorial02 {
     }
 
     private long InitWindow() {
-        window = new Direct3DDisplay("Direct3D 11 Tutorial 2: Rendering a Triangle", 800, 600, WS_OVERLAPPED | WS_CAPTION
-                | WS_SYSMENU | WS_MINIMIZEBOX);
+        window = new Direct3DDisplay("Direct3D 11 Tutorial 2: Rendering a Triangle", 800, 600, WS_OVERLAPPED
+                | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX);
         window.setVisible(true);
         return 0L;
     }
@@ -366,8 +366,7 @@ public class Tutorial02 {
         // Set vertex buffer
         int stride = 4 * 3;
         int offset = 0;
-        g_pImmediateContext.IASetVertexBuffers(0, new ID3D11Buffer[] { g_pVertexBuffer }, new int[] { stride },
-                new int[] { offset });
+        g_pImmediateContext.IASetVertexBuffers(0, g_pVertexBuffer, stride, offset);
 
         // Set primitive topology
         g_pImmediateContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
