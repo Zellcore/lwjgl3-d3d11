@@ -1,7 +1,9 @@
 package org.lwjgl.d3d11.impl;
 
 import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY;
@@ -111,7 +113,21 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
 
     @Override
     public void IASetVertexBuffers(int startSlot, ID3D11Buffer[] ppVertexBuffers, int[] strides, int[] offsets) {
-        throw new UnsupportedOperationException("NYI");
+        if (ppVertexBuffers.length == 1) {
+            IASetVertexBuffers(startSlot, ppVertexBuffers[0], strides[0], offsets[0]);
+        } else {
+            PointerBuffer vertexBuffersPb = BufferPool.pointerBuffer(ppVertexBuffers.length);
+            IntBuffer stridesIb = BufferUtils.createIntBuffer(strides.length);
+            IntBuffer offsetsIb = BufferUtils.createIntBuffer(offsets.length);
+            for (int i = 0; i < ppVertexBuffers.length; i++) {
+                D3D11BufferImpl bufferImpl = (D3D11BufferImpl) ppVertexBuffers[0];
+                vertexBuffersPb.put(i, bufferImpl.ptr);
+                stridesIb.put(i, strides[i]);
+                offsetsIb.put(i, offsets[i]);
+            }
+            nIASetVertexBuffers(ptr, startSlot, MemoryUtil.memAddress(vertexBuffersPb),
+                    MemoryUtil.memAddress(stridesIb), MemoryUtil.memAddress(offsetsIb));
+        }
     }
 
     @Override

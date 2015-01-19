@@ -59,6 +59,18 @@ extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextIm
 
 /*
 * Class:     org_lwjgl_d3d11_impl_D3D11DeviceContextImpl
+* Method:    nIASetVertexBuffers
+* Signature: (JIJJJ)V
+*/
+extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetVertexBuffers
+(JNIEnv * env, jclass clazz, jlong thisPtr, jint startSlot, jlong vertexBuffersPtr, jlong stridesPtr, jlong offsetsPtr) {
+    ID3D11DeviceContext* deviceContext = (ID3D11DeviceContext*)(intptr_t)thisPtr;
+    ID3D11Buffer* const* buffer = (ID3D11Buffer* const*)(intptr_t)vertexBuffersPtr;
+    deviceContext->IASetVertexBuffers((UINT)startSlot, 1, buffer, (const UINT*)stridesPtr, (const UINT*)offsetsPtr);
+}
+
+/*
+* Class:     org_lwjgl_d3d11_impl_D3D11DeviceContextImpl
 * Method:    nIASetVertexBuffers1
 * Signature: (JIJII)V
 */

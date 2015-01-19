@@ -16,6 +16,7 @@ EXPORTS
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nOMSetRenderTargets
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nRSSetViewports
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetInputLayout
+    Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetVertexBuffers
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetVertexBuffers1
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetPrimitiveTopology
     Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nVSSetShader
