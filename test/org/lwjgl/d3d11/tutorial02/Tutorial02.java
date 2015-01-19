@@ -379,7 +379,7 @@ public class Tutorial02 {
     }
 
     private void Render() {
-        // Just clear the backbuffer
+        // Clear the back buffer
         g_pImmediateContext.ClearRenderTargetView(g_pRenderTargetView, DirectXColors.MidnightBlue);
 
         // Render a triangle
@@ -387,6 +387,7 @@ public class Tutorial02 {
         g_pImmediateContext.PSSetShader(g_pPixelShader, null);
         g_pImmediateContext.Draw(3, 0);
 
+        // Present the information rendered to the back buffer to the front buffer (the screen)
         g_pSwapChain.Present(0, 0);
     }
 
