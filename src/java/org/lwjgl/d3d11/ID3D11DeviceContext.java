@@ -10,4 +10,16 @@ public interface ID3D11DeviceContext extends ID3D11DeviceChild {
 
     void IASetInputLayout(ID3D11InputLayout inputLayout);
 
+    void IASetVertexBuffers(int startSlot, ID3D11Buffer[] ppVertexBuffers, int[] strides, int[] offsets);
+
+    void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffers, int strides, int offsets);
+
+    void IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology);
+
+    void VSSetShader(ID3D11VertexShader vertexShader, ID3D11ClassInstance[] classInstances);
+
+    void PSSetShader(ID3D11PixelShader pixelShader, ID3D11ClassInstance[] classInstances);
+
+    void Draw(int vertexCount, int startVertexLocation);
+
 }

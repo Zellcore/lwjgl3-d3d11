@@ -5,6 +5,7 @@ import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
 import static org.lwjgl.d3d11.impl.D3D11.*;
 import static org.lwjgl.d3d11.DXGI_FORMAT.*;
 import static org.lwjgl.d3d11.D3D11_USAGE.*;
+import static org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY.*;
 import static org.lwjgl.d3d11.DXGI.*;
 import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
 import static org.lwjgl.d3d11.D3D11_INPUT_CLASSIFICATION.*;
@@ -309,9 +310,8 @@ public class Tutorial02 {
         }
 
         // Define the input layout
-        D3D11_INPUT_ELEMENT_DESC layout[] = { new D3D11_INPUT_ELEMENT_DESC(
-                "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0), 
-        };
+        D3D11_INPUT_ELEMENT_DESC layout[] = { new D3D11_INPUT_ELEMENT_DESC("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+                0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0), };
 
         // Create the input layout
         Out<ID3D11InputLayout> pVertexLayoutOut = new Out<ID3D11InputLayout>();
@@ -363,6 +363,14 @@ public class Tutorial02 {
         if (FAILED(hr))
             return hr;
 
+        // Set vertex buffer
+        int stride = 4 * 3;
+        int offset = 0;
+        g_pImmediateContext.IASetVertexBuffers(0, g_pVertexBuffer, stride, offset);
+
+        // Set primitive topology
+        g_pImmediateContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
         return 0;
     }
 
@@ -373,6 +381,12 @@ public class Tutorial02 {
     private void Render() {
         // Just clear the backbuffer
         g_pImmediateContext.ClearRenderTargetView(g_pRenderTargetView, DirectXColors.MidnightBlue);
+
+        // Render a triangle
+        g_pImmediateContext.VSSetShader(g_pVertexShader, null);
+        g_pImmediateContext.PSSetShader(g_pPixelShader, null);
+        g_pImmediateContext.Draw(3, 0);
+
         g_pSwapChain.Present(0, 0);
     }
 

@@ -4,10 +4,15 @@ import java.nio.ByteBuffer;
 
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
+import org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY;
+import org.lwjgl.d3d11.ID3D11Buffer;
+import org.lwjgl.d3d11.ID3D11ClassInstance;
 import org.lwjgl.d3d11.ID3D11DepthStencilView;
 import org.lwjgl.d3d11.ID3D11DeviceContext;
 import org.lwjgl.d3d11.ID3D11InputLayout;
+import org.lwjgl.d3d11.ID3D11PixelShader;
 import org.lwjgl.d3d11.ID3D11RenderTargetView;
+import org.lwjgl.d3d11.ID3D11VertexShader;
 import org.lwjgl.d3d11.util.BufferPool;
 import org.lwjgl.d3d11.util.StructUtils;
 import org.lwjgl.system.MemoryUtil;
@@ -30,6 +35,31 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     public static final native void nRSSetViewports(long thisPtr, int numViewports, long viewportsPtr);
 
     public static final native void nIASetInputLayout(long thisPtr, long inputLayoutPtr);
+
+    public static final native void nIASetVertexBuffers(long thisPtr, int startSlot, long vertexBuffersPtr,
+            long stridesPtr, long offsetsPtr);
+
+    public static final native void nIASetPrimitiveTopology(long thisPtr, int primitiveTopology);
+
+    /**
+     * Convenience alternative when only a single buffer is wanted.
+     * 
+     * @param thisPtr
+     * @param startSlot
+     * @param vertexBuffersPtr
+     * @param strides
+     * @param offsets
+     */
+    public static final native void nIASetVertexBuffers1(long thisPtr, int startSlot, long vertexBuffersPtr,
+            int stride, int offset);
+
+    public static final native void nVSSetShader(long thisPtr, long vertexShaderPtr, long classInstancesPtr,
+            int numClassInstances);
+
+    public static final native void nPSSetShader(long thisPtr, long pixelShaderPtr, long classInstancesPtr,
+            int numClassInstances);
+
+    public static final native void nDraw(long thisPtr, int vertexCount, int startVertexLocation);
 
     @Override
     public void ClearRenderTargetView(ID3D11RenderTargetView view, float[] color) {
@@ -70,6 +100,44 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     public void IASetInputLayout(ID3D11InputLayout inputLayout) {
         NativeObjectImpl inputLayoutImpl = (NativeObjectImpl) inputLayout;
         nIASetInputLayout(ptr, inputLayoutImpl.ptr);
+    }
+
+    @Override
+    public void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffers, int stride, int offset) {
+        D3D11BufferImpl bufferImpl = (D3D11BufferImpl) ppVertexBuffers;
+        long bufferPtr = bufferImpl.ptr;
+        nIASetVertexBuffers1(ptr, startSlot, bufferPtr, stride, offset);
+    }
+
+    @Override
+    public void IASetVertexBuffers(int startSlot, ID3D11Buffer[] ppVertexBuffers, int[] strides, int[] offsets) {
+        throw new UnsupportedOperationException("NYI");
+    }
+
+    @Override
+    public void IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology) {
+        nIASetPrimitiveTopology(ptr, primitiveTopology.value);
+    }
+
+    @Override
+    public void VSSetShader(ID3D11VertexShader vertexShader, ID3D11ClassInstance[] classInstances) {
+        D3D11VertexShaderImpl vsImpl = (D3D11VertexShaderImpl) vertexShader;
+        long vsPtr = vsImpl.ptr;
+        // FIXME kai: class instances missing!
+        nVSSetShader(ptr, vsPtr, 0L, 0);
+    }
+
+    @Override
+    public void PSSetShader(ID3D11PixelShader pixelShader, ID3D11ClassInstance[] classInstances) {
+        D3D11PixelShaderImpl psImpl = (D3D11PixelShaderImpl) pixelShader;
+        long psPtr = psImpl.ptr;
+        // FIXME kai: class instances missing!
+        nPSSetShader(ptr, psPtr, 0L, 0);
+    }
+
+    @Override
+    public void Draw(int vertexCount, int startVertexLocation) {
+        nDraw(ptr, vertexCount, startVertexLocation);
     }
 
 }
