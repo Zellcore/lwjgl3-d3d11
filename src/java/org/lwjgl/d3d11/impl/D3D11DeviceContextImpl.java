@@ -139,16 +139,36 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     public void VSSetShader(ID3D11VertexShader vertexShader, ID3D11ClassInstance[] classInstances) {
         D3D11VertexShaderImpl vsImpl = (D3D11VertexShaderImpl) vertexShader;
         long vsPtr = vsImpl.ptr;
-        // FIXME kai: class instances missing!
-        nVSSetShader(ptr, vsPtr, 0L, 0);
+        long classInstancesPtr = 0L;
+        int numClassInstances = 0;
+        if (classInstances != null && classInstances.length > 0) {
+            PointerBuffer pb = BufferPool.pointerBuffer(classInstances.length);
+            for (int i = 0; i < classInstances.length; i++) {
+                D3D11ClassInstanceImpl classInstanceImpl = (D3D11ClassInstanceImpl) classInstances[i];
+                pb.put(i, classInstanceImpl.ptr);
+            }
+            classInstancesPtr = MemoryUtil.memAddress(pb);
+            numClassInstances = classInstances.length;
+        }
+        nVSSetShader(ptr, vsPtr, classInstancesPtr, numClassInstances);
     }
 
     @Override
     public void PSSetShader(ID3D11PixelShader pixelShader, ID3D11ClassInstance[] classInstances) {
         D3D11PixelShaderImpl psImpl = (D3D11PixelShaderImpl) pixelShader;
         long psPtr = psImpl.ptr;
-        // FIXME kai: class instances missing!
-        nPSSetShader(ptr, psPtr, 0L, 0);
+        long classInstancesPtr = 0L;
+        int numClassInstances = 0;
+        if (classInstances != null && classInstances.length > 0) {
+            PointerBuffer pb = BufferPool.pointerBuffer(classInstances.length);
+            for (int i = 0; i < classInstances.length; i++) {
+                D3D11ClassInstanceImpl classInstanceImpl = (D3D11ClassInstanceImpl) classInstances[i];
+                pb.put(i, classInstanceImpl.ptr);
+            }
+            classInstancesPtr = MemoryUtil.memAddress(pb);
+            numClassInstances = classInstances.length;
+        }
+        nPSSetShader(ptr, psPtr, classInstancesPtr, numClassInstances);
     }
 
     @Override
