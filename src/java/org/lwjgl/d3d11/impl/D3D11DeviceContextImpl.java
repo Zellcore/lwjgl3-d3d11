@@ -80,9 +80,8 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
         PointerBuffer rtvPointers = BufferPool.pointerBuffer(renderTargetViews.length);
         for (int i = 0; i < renderTargetViews.length; i++) {
             D3D11RenderTargetViewImpl rtvImpl = (D3D11RenderTargetViewImpl) renderTargetViews[i];
-            rtvPointers.put(rtvImpl != null ? rtvImpl.ptr : 0L);
+            rtvPointers.put(i, rtvImpl != null ? rtvImpl.ptr : 0L);
         }
-        rtvPointers.rewind();
         D3D11DepthStencilViewImpl dsvImpl = (D3D11DepthStencilViewImpl) depthStencilView;
         long dsvPtr = dsvImpl != null ? dsvImpl.ptr : 0L;
         nOMSetRenderTargets(ptr, renderTargetViews.length, MemoryUtil.memAddress(rtvPointers), dsvPtr);

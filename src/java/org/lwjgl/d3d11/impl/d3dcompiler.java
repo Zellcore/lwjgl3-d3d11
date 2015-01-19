@@ -56,11 +56,11 @@ public class d3dcompiler {
             for (int i = 0; i < defines.length; i++) {
                 ByteBuffer defineNameBuffer = MemoryUtil.memEncodeUTF8(defines[i].Name, true);
                 ByteBuffer defineDefinitionBuffer = MemoryUtil.memEncodeUTF8(defines[i].Definition, true);
-                definesPb.put(MemoryUtil.memAddress(defineNameBuffer));
-                definesPb.put(MemoryUtil.memAddress(defineDefinitionBuffer));
+                definesPb.put(i, MemoryUtil.memAddress(defineNameBuffer));
+                definesPb.put(i, MemoryUtil.memAddress(defineDefinitionBuffer));
             }
             /* Terminating (NULL, NULL) element!!! */
-            definesPb.put(0L).put(0L);
+            definesPb.put(defines.length, 0L).put(defines.length + 1, 0L);
         }
         D3DIncludeImpl includeImpl = (D3DIncludeImpl) include;
         long includePtr = includeImpl != null ? includeImpl.ptr : 0L;

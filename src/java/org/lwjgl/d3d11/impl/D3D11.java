@@ -34,10 +34,9 @@ public class D3D11 {
         DXGIAdapterImpl pAdapterImpl = (DXGIAdapterImpl) pAdapter;
         long adapterPtr = pAdapterImpl != null ? pAdapterImpl.ptr : 0L;
         ByteBuffer featureLevelsBuffer = BufferPool.byteBuffer(4 * pFeatureLevels.length);
-        for (D3D_FEATURE_LEVEL fl : pFeatureLevels) {
-            featureLevelsBuffer.putInt(fl.value);
+        for (int i = 0; i < pFeatureLevels.length; i++) {
+            featureLevelsBuffer.putInt(4 * i, pFeatureLevels[i].value);
         }
-        featureLevelsBuffer.rewind();
         PointerBuffer ppDeviceBuffer = BufferPool.pointerBuffer(1);
         IntBuffer selectedFeatureLevelBuffer = BufferUtils.createIntBuffer(1);
         PointerBuffer ppImmediateContextBuffer = BufferUtils.createPointerBuffer(1);
