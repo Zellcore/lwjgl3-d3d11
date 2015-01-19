@@ -1,24 +1,48 @@
-package org.lwjgl.d3d11.tutorial03;
+package org.lwjgl.d3d11.tutorial04;
 
-import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.*;
-import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.*;
-import static org.lwjgl.d3d11.impl.D3D11.*;
-import static org.lwjgl.d3d11.DXGI_FORMAT.*;
-import static org.lwjgl.d3d11.D3D11_USAGE.*;
-import static org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY.*;
-import static org.lwjgl.d3d11.DXGI.*;
-import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.*;
-import static org.lwjgl.d3d11.D3D11_INPUT_CLASSIFICATION.*;
-import static org.lwjgl.d3d11.D3D11_BIND_FLAG.*;
-import static org.lwjgl.system.windows.WinUser.*;
-import static org.lwjgl.d3d11.winerror.*;
-import static org.lwjgl.d3d11.impl.d3dcompiler.*;
-import static org.lwjgl.system.windows.WinError.*;
+import static org.lwjgl.d3d11.D3D11_BIND_FLAG.D3D11_BIND_INDEX_BUFFER;
+import static org.lwjgl.d3d11.D3D11_BIND_FLAG.D3D11_BIND_VERTEX_BUFFER;
+import static org.lwjgl.d3d11.D3D11_CREATE_DEVICE_FLAG.D3D11_CREATE_DEVICE_DEBUG;
+import static org.lwjgl.d3d11.D3D11_INPUT_CLASSIFICATION.D3D11_INPUT_PER_VERTEX_DATA;
+import static org.lwjgl.d3d11.D3D11_USAGE.D3D11_USAGE_DEFAULT;
+import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_HARDWARE;
+import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_NULL;
+import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_REFERENCE;
+import static org.lwjgl.d3d11.D3D_DRIVER_TYPE.D3D_DRIVER_TYPE_WARP;
+import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_0;
+import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_10_1;
+import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_0;
+import static org.lwjgl.d3d11.D3D_FEATURE_LEVEL.D3D_FEATURE_LEVEL_11_1;
+import static org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY.D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+import static org.lwjgl.d3d11.DXGI.DXGI_MWA_NO_ALT_ENTER;
+import static org.lwjgl.d3d11.DXGI.DXGI_USAGE_RENDER_TARGET_OUTPUT;
+import static org.lwjgl.d3d11.DXGI_FORMAT.DXGI_FORMAT_R16_UINT;
+import static org.lwjgl.d3d11.DXGI_FORMAT.DXGI_FORMAT_R32G32B32A32_FLOAT;
+import static org.lwjgl.d3d11.DXGI_FORMAT.DXGI_FORMAT_R32G32B32_FLOAT;
+import static org.lwjgl.d3d11.DXGI_FORMAT.DXGI_FORMAT_R8G8B8A8_UNORM;
+import static org.lwjgl.d3d11.impl.D3D11.D3D11CreateDevice;
+import static org.lwjgl.d3d11.impl.D3D11.D3D11_SDK_VERSION;
+import static org.lwjgl.d3d11.impl.d3dcompiler.D3DCOMPILE_DEBUG;
+import static org.lwjgl.d3d11.impl.d3dcompiler.D3DCOMPILE_ENABLE_STRICTNESS;
+import static org.lwjgl.d3d11.impl.d3dcompiler.D3DCOMPILE_SKIP_OPTIMIZATION;
+import static org.lwjgl.d3d11.impl.d3dcompiler.D3DCompileFromFile;
+import static org.lwjgl.d3d11.winerror.FAILED;
+import static org.lwjgl.d3d11.winerror.SUCCEEDED;
+import static org.lwjgl.system.windows.WinError.S_OK;
+import static org.lwjgl.system.windows.WinUser.DispatchMessage;
+import static org.lwjgl.system.windows.WinUser.PM_REMOVE;
+import static org.lwjgl.system.windows.WinUser.PeekMessage;
+import static org.lwjgl.system.windows.WinUser.TranslateMessage;
+import static org.lwjgl.system.windows.WinUser.WS_CAPTION;
+import static org.lwjgl.system.windows.WinUser.WS_MINIMIZEBOX;
+import static org.lwjgl.system.windows.WinUser.WS_OVERLAPPED;
+import static org.lwjgl.system.windows.WinUser.WS_SYSMENU;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.d3d11.D3D11_BUFFER_DESC;
@@ -55,18 +79,19 @@ import org.lwjgl.d3d11.impl.DXGIDeviceImpl;
 import org.lwjgl.d3d11.impl.DXGIFactory1Impl;
 import org.lwjgl.d3d11.impl.DXGIFactory2Impl;
 import org.lwjgl.d3d11.impl.DXGISwapChainImpl;
+import org.lwjgl.demo.util.Matrix4f;
 import org.lwjgl.system.windows.Direct3DDisplay;
 import org.lwjgl.system.windows.MSG;
 
 /**
- * This is a port of the Tutorial03 from the <a
+ * This is a port of the Tutorial04 from the <a
  * href="https://code.msdn.microsoft.com/windowsdesktop/Direct3D-Tutorial-Win32-829979ef">Direct3D Tutorial Win32
  * Sample</a>.
  * 
  * @author kai
  *
  */
-public class Tutorial03 {
+public class Tutorial04 {
 
     static final boolean _DEBUG = true;
 
@@ -84,6 +109,11 @@ public class Tutorial03 {
     ID3D11PixelShader g_pPixelShader = null;
     ID3D11InputLayout g_pVertexLayout = null;
     ID3D11Buffer g_pVertexBuffer = null;
+    ID3D11Buffer g_pIndexBuffer = null;
+    ID3D11Buffer g_pConstantBuffer = null;
+    Matrix4f g_World;
+    Matrix4f g_View;
+    Matrix4f g_Projection;
 
     private void winMain() throws URISyntaxException {
         if (FAILED(InitWindow())) {
@@ -145,7 +175,7 @@ public class Tutorial03 {
     }
 
     private long InitWindow() {
-        window = new Direct3DDisplay("Direct3D 11 Tutorial 3: Shaders", 800, 600, WS_OVERLAPPED | WS_CAPTION
+        window = new Direct3DDisplay("Direct3D 11 Tutorial 4: 3D Spaces", 800, 600, WS_OVERLAPPED | WS_CAPTION
                 | WS_SYSMENU | WS_MINIMIZEBOX);
         window.setVisible(true);
         return 0L;
@@ -291,7 +321,7 @@ public class Tutorial03 {
         // Compile the vertex shader
         ID3DBlob pVSBlob = null;
         Out<ID3DBlob> pVSBlobOut = new Out<ID3DBlob>();
-        hr = CompileShaderFromFile(new File(Tutorial03.class.getResource("Tutorial03.fx").toURI()), "VS", "vs_4_0",
+        hr = CompileShaderFromFile(new File(Tutorial04.class.getResource("Tutorial04.fx").toURI()), "VS", "vs_4_0",
                 pVSBlobOut);
         pVSBlob = pVSBlobOut.value;
         if (FAILED(hr)) {
@@ -310,8 +340,11 @@ public class Tutorial03 {
         }
 
         // Define the input layout
-        D3D11_INPUT_ELEMENT_DESC layout[] = { new D3D11_INPUT_ELEMENT_DESC("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-                0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0), };
+        D3D11_INPUT_ELEMENT_DESC layout[] = {
+                new D3D11_INPUT_ELEMENT_DESC("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,
+                        D3D11_INPUT_PER_VERTEX_DATA, 0),
+                new D3D11_INPUT_ELEMENT_DESC("COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12,
+                        D3D11_INPUT_PER_VERTEX_DATA, 0) };
 
         // Create the input layout
         Out<ID3D11InputLayout> pVertexLayoutOut = new Out<ID3D11InputLayout>();
@@ -327,7 +360,7 @@ public class Tutorial03 {
         // Compile the pixel shader
         ID3DBlob pPSBlob = null;
         Out<ID3DBlob> pPSBlobOut = new Out<ID3DBlob>();
-        hr = CompileShaderFromFile(new File(Tutorial03.class.getResource("Tutorial03.fx").toURI()), "PS", "ps_4_0",
+        hr = CompileShaderFromFile(new File(Tutorial04.class.getResource("Tutorial04.fx").toURI()), "PS", "ps_4_0",
                 pPSBlobOut);
         pPSBlob = pPSBlobOut.value;
         if (FAILED(hr)) {
@@ -345,11 +378,16 @@ public class Tutorial03 {
             return hr;
 
         // Create vertex buffer
-        ByteBuffer vertices = BufferUtils.createByteBuffer(4 * 3 * 3);
+        ByteBuffer vertices = BufferUtils.createByteBuffer(4 * (3 + 4) * 8);
         FloatBuffer fb = vertices.asFloatBuffer();
-        fb.put(0.0f).put(0.5f).put(0.5f);
-        fb.put(0.5f).put(-0.5f).put(0.5f);
-        fb.put(-0.5f).put(-0.5f).put(0.5f);
+        fb.put(-1.0f).put(1.0f).put(-1.0f).put(0.0f).put(0.0f).put(1.0f).put(1.0f);
+        fb.put(1.0f).put(1.0f).put(-1.0f).put(0.0f).put(1.0f).put(0.0f).put(1.0f);
+        fb.put(1.0f).put(1.0f).put(1.0f).put(0.0f).put(1.0f).put(1.0f).put(1.0f);
+        fb.put(-1.0f).put(1.0f).put(1.0f).put(1.0f).put(0.0f).put(0.0f).put(1.0f);
+        fb.put(-1.0f).put(-1.0f).put(-1.0f).put(1.0f).put(0.0f).put(1.0f).put(1.0f);
+        fb.put(1.0f).put(-1.0f).put(-1.0f).put(1.0f).put(1.0f).put(0.0f).put(1.0f);
+        fb.put(1.0f).put(-1.0f).put(1.0f).put(1.0f).put(1.0f).put(1.0f).put(1.0f);
+        fb.put(-1.0f).put(-1.0f).put(1.0f).put(0.0f).put(0.0f).put(0.0f).put(1.0f);
         D3D11_BUFFER_DESC bd = new D3D11_BUFFER_DESC();
         bd.Usage = D3D11_USAGE_DEFAULT;
         bd.ByteWidth = vertices.remaining();
@@ -364,9 +402,46 @@ public class Tutorial03 {
             return hr;
 
         // Set vertex buffer
-        int stride = 4 * 3;
+        int stride = 4 * (3 + 4);
         int offset = 0;
         g_pImmediateContext.IASetVertexBuffers(0, g_pVertexBuffer, stride, offset);
+
+        // Create index buffer
+        ByteBuffer indices = BufferUtils.createByteBuffer(2 * 36);
+        ShortBuffer ib = indices.asShortBuffer();
+        {
+            ib.put((short) 3).put((short) 1).put((short) 0);
+            ib.put((short) 2).put((short) 1).put((short) 3);
+
+            ib.put((short) 0).put((short) 5).put((short) 4);
+            ib.put((short) 1).put((short) 5).put((short) 0);
+
+            ib.put((short) 3).put((short) 4).put((short) 7);
+            ib.put((short) 0).put((short) 4).put((short) 3);
+
+            ib.put((short) 1).put((short) 6).put((short) 5);
+            ib.put((short) 2).put((short) 6).put((short) 1);
+
+            ib.put((short) 2).put((short) 7).put((short) 6);
+            ib.put((short) 3).put((short) 7).put((short) 2);
+
+            ib.put((short) 6).put((short) 4).put((short) 5);
+            ib.put((short) 7).put((short) 4).put((short) 6);
+        }
+        ;
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.ByteWidth = indices.remaining(); // 36 vertices needed for 12 triangles in a triangle list
+        bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+        bd.CPUAccessFlags = 0;
+        InitData.pSysMem = indices;
+        Out<ID3D11Buffer> pIndexBufferOut = new Out<ID3D11Buffer>();
+        hr = g_pd3dDevice.CreateBuffer(bd, InitData, pIndexBufferOut);
+        g_pIndexBuffer = pIndexBufferOut.value;
+        if (FAILED(hr))
+            return hr;
+
+        // Set index buffer
+        g_pImmediateContext.IASetIndexBuffer(g_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 
         // Set primitive topology
         g_pImmediateContext.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -385,14 +460,14 @@ public class Tutorial03 {
         // Render a triangle
         g_pImmediateContext.VSSetShader(g_pVertexShader, null);
         g_pImmediateContext.PSSetShader(g_pPixelShader, null);
-        g_pImmediateContext.Draw(3, 0);
+        g_pImmediateContext.DrawIndexed(36, 0, 0);
 
         // Present the information rendered to the back buffer to the front buffer (the screen)
         g_pSwapChain.Present(0, 0);
     }
 
     public static void main(String[] args) throws URISyntaxException {
-        new Tutorial03().winMain();
+        new Tutorial04().winMain();
     }
 
 }

@@ -129,3 +129,27 @@ extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextIm
     deviceContext->Draw((UINT)vertexCount, (UINT)startVertexLocation);
 }
 
+/*
+* Class:     org_lwjgl_d3d11_impl_D3D11DeviceContextImpl
+* Method:    nIASetIndexBuffer
+* Signature: (JJII)V
+*/
+extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nIASetIndexBuffer
+(JNIEnv * env, jclass clazz, jlong thisPtr, jlong bufferPtr, jint format, jint offset) {
+    ID3D11DeviceContext* deviceContext = (ID3D11DeviceContext*)(intptr_t)thisPtr;
+    ID3D11Buffer* buffer = (ID3D11Buffer*)(intptr_t)bufferPtr;
+    deviceContext->IASetIndexBuffer(buffer, (DXGI_FORMAT)format, (UINT)offset);
+}
+
+/*
+* Class:     org_lwjgl_d3d11_impl_D3D11DeviceContextImpl
+* Method:    nDrawIndexed
+* Signature: (JIII)V
+*/
+extern "C" JNIEXPORT void JNICALL Java_org_lwjgl_d3d11_impl_D3D11DeviceContextImpl_nDrawIndexed
+(JNIEnv * env, jclass clazz, jlong thisPtr, jint indexCount, jint startIndexLocation, jint baseVertexLocation) {
+    ID3D11DeviceContext* deviceContext = (ID3D11DeviceContext*)(intptr_t)thisPtr;
+    deviceContext->DrawIndexed((UINT)indexCount, (UINT)startIndexLocation, (UINT)baseVertexLocation);
+}
+
+

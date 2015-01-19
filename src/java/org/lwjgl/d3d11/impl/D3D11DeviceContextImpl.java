@@ -7,6 +7,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D11_VIEWPORT;
 import org.lwjgl.d3d11.D3D_PRIMITIVE_TOPOLOGY;
+import org.lwjgl.d3d11.DXGI_FORMAT;
 import org.lwjgl.d3d11.ID3D11Buffer;
 import org.lwjgl.d3d11.ID3D11ClassInstance;
 import org.lwjgl.d3d11.ID3D11DepthStencilView;
@@ -63,6 +64,11 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
 
     public static final native void nDraw(long thisPtr, int vertexCount, int startVertexLocation);
 
+    public static final native void nIASetIndexBuffer(long thisPtr, long indexBufferPtr, int format, int offset);
+
+    public static final native void nDrawIndexed(long thisPtr, int indexCount, int startIndexLocation,
+            int startVertexLocation);
+
     @Override
     public void ClearRenderTargetView(ID3D11RenderTargetView view, float[] color) {
         ByteBuffer colorBuffer = BufferPool.byteBuffer(4 * 4);
@@ -104,8 +110,8 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     }
 
     @Override
-    public void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffers, int stride, int offset) {
-        D3D11BufferImpl bufferImpl = (D3D11BufferImpl) ppVertexBuffers;
+    public void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffer, int stride, int offset) {
+        D3D11BufferImpl bufferImpl = (D3D11BufferImpl) ppVertexBuffer;
         long bufferPtr = bufferImpl.ptr;
         nIASetVertexBuffers1(ptr, startSlot, bufferPtr, stride, offset);
     }
@@ -173,6 +179,17 @@ public class D3D11DeviceContextImpl extends D3D11DeviceChildImpl implements ID3D
     @Override
     public void Draw(int vertexCount, int startVertexLocation) {
         nDraw(ptr, vertexCount, startVertexLocation);
+    }
+
+    @Override
+    public void IASetIndexBuffer(ID3D11Buffer indexBuffer, DXGI_FORMAT format, int offset) {
+        D3D11BufferImpl bufferImpl = (D3D11BufferImpl) indexBuffer;
+        nIASetIndexBuffer(ptr, bufferImpl.ptr, format.value, offset);
+    }
+
+    @Override
+    public void DrawIndexed(int indexCount, int startIndexLocation, int baseVertexLocation) {
+        nDrawIndexed(ptr, indexCount, startIndexLocation, baseVertexLocation);
     }
 
 }

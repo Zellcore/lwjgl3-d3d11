@@ -12,7 +12,7 @@ public interface ID3D11DeviceContext extends ID3D11DeviceChild {
 
     void IASetVertexBuffers(int startSlot, ID3D11Buffer[] ppVertexBuffers, int[] strides, int[] offsets);
 
-    void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffers, int strides, int offsets);
+    void IASetVertexBuffers(int startSlot, ID3D11Buffer ppVertexBuffer, int stride, int offset);
 
     void IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY primitiveTopology);
 
@@ -21,5 +21,9 @@ public interface ID3D11DeviceContext extends ID3D11DeviceChild {
     void PSSetShader(ID3D11PixelShader pixelShader, ID3D11ClassInstance[] classInstances);
 
     void Draw(int vertexCount, int startVertexLocation);
+
+    void IASetIndexBuffer(ID3D11Buffer indexBuffer, DXGI_FORMAT format, int offset);
+
+    void DrawIndexed(int indexCount, int startIndexLocation, int baseVertexLocation);
 
 }
