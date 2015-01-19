@@ -3,10 +3,10 @@ package org.lwjgl.d3d11.impl;
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.ID3DInclude;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.d3d11.D3D_SHADER_MACRO;
 import org.lwjgl.d3d11.ID3DBlob;
+import org.lwjgl.d3d11.ID3DInclude;
 import org.lwjgl.d3d11.Out;
 import org.lwjgl.d3d11.winerror;
 import org.lwjgl.system.MemoryUtil;
